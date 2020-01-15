@@ -20,10 +20,10 @@ time = p1_data.time;
 figure(67)
 clf
 
-plot(time, sep)
+plot(time, sep-1) % assuming D_p = 1
 
 xlabel('$t$')
-ylabel('$s/D_p$')
+ylabel('$(s-D_p)/D_p$')
 title('particle separation')
 figure_defaults()
 

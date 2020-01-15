@@ -52,13 +52,14 @@ subplot(2,1,1)
 hold on
 plot(time, y_p)
 fprintf('Initial particle position: %g D_p\n',y_p(1))
-ylabel('$s_p/D_p$')
-title('particle position and velocity')
+ylabel('$h_p/D_p$')
+title('particle height')
 
 subplot(2,1,2)
 hold on
 plot(time, vel)
 ylabel('$w_p/w_s$')
 xlabel('$t$')
+title('particle velocity')
 
 figure_defaults()
