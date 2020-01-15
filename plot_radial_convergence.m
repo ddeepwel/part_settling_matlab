@@ -1,8 +1,11 @@
-function [x,u_mid] = plot_radial_convergence(plane_index, ii, field)
+function [x,u_mid] = plot_radial_convergence(plane_index, ii, field, make_plot)
 % plot the horizontal velocity at a particular plane
 
 if nargin == 2
     field = 'u';
+    make_plot = true;
+elseif nargin == 3;
+    make_plot = true;
 end
 
 if strcmp(field,'u')
@@ -25,24 +28,26 @@ field_name = sprintf('/%s/%s',group, field);
 u = h5read(filename_2d, field_name);
 u_mid = u(:,round(Nz/2));
 
-figure(59)
-clf
-plot(x, u_mid)
-xlim([0 max(x(:))])
-grid on
-xlabel('$r/D_p$')
-ylab = sprintf('$%s / w_s$', title_field);
-ylabel(ylab)
-ylim([-0.25 0.05])
+if make_plot
+    figure(59)
+    clf
+    plot(x, u_mid)
+    xlim([0 max(x(:))])
+    grid on
+    xlabel('$r/D_p$')
+    ylab = sprintf('$%s / w_s$', title_field);
+    ylabel(ylab)
+    ylim([-0.25 0.05])
 
-xsec = h5read(filename_2d, ['/',group,'/y']);
-time = h5read(filename_2d, '/time');
-ttl = sprintf('$t=%2.2g$, $y = %2.0f$', time, xsec);
-title(ttl)
+    xsec = h5read(filename_2d, ['/',group,'/y']);
+    time = h5read(filename_2d, '/time');
+    ttl = sprintf('$t=%2.2g$, $y = %2.0f$', time, xsec);
+    title(ttl)
 
-figure_defaults();
-check_make_dir('figures')
-cd('figures')
-filename = sprintf('velocity_%s',title_field);
-print_figure(filename,'format','pdf','size',[6 4])
-cd('..')
+    figure_defaults();
+    check_make_dir('figures')
+    cd('figures')
+    filename = sprintf('velocity_%s',title_field);
+    %print_figure(filename,'format','pdf','size',[6 4])
+    cd('..')
+end
