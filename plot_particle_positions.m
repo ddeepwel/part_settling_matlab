@@ -16,22 +16,23 @@ clf
 hold on
 
 time = p{1}.time;
-colormap(parula(length(time)))
-cmap = colormap(parula(length(time)));
+Nt = length(time);
+colormap(parula(Nt))
+cmap = colormap(parula(Nt));
 for mm = 1:N_files
     %plot(p{mm}.x, particles{mm}.y, 'k')
     %legend_label{mm} = sprintf('Particle %d',mm);
     x = p{mm}.x;
     y = p{mm}.y;
     col = p{mm}.time;
-    surface([x,x], [y,y], [col,col],...
-        'facecol','no','edgecol','interp','linew',2);
+    scatter(x,y,[],col,'fill','SizeData',8)
 end
 
 %for ts = linspace(0,time(end), 10)
 for ts = 0:5:time(end)
-    ind = nearest_index(p{1}.time, ts);
-    plot([p{1}.x(ind) p{2}.x(ind)],[p{1}.y(ind) p{2}.y(ind)], 'Color', cmap(ind,:))
+    ind = nearest_index(time, ts);
+    cmap_ind = round(ts/time(end) * (Nt-1) + 1);
+    plot([p{1}.x(ind) p{2}.x(ind)],[p{1}.y(ind) p{2}.y(ind)], 'Color', cmap(cmap_ind,:))
 end
 
 cbar = colorbar;
