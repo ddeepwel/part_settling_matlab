@@ -1,8 +1,8 @@
-function [] = clean_mobile()
-    % clean_mobile reads in mobile.dat and removes repeated times
+function [] = clean_dat_file(file)
+    % clean_dat_file reads in a dat file and removes repeated times
 
-    % read analysis file (if it exists
-    diag_file = 'mobile.dat';
+    % read analysis file (if it exists)
+    diag_file = [file,'.dat'];
     if exist(diag_file, 'file') == 2
         try
             diagnos = readtable(diag_file);
@@ -11,7 +11,7 @@ function [] = clean_mobile()
         end
 
         % find indices to keep
-        time = diagnos.Var1;
+        time = diagnos.time;
         keep_inds = find_inds(time);
 
         % clean up diagnostics file
