@@ -7,8 +7,8 @@ N_files = length(particle_files);
 
 p = cell(1, N_files);
 for mm = 1:N_files
-    fname = sprintf('mobile_%d.dat', mm-1);
-    p{mm} = readtable(fname);
+    fname = sprintf('mobile_%d', mm-1);
+    p{mm} = check_read_dat(fname);
 end
 
 ysep = ceil(abs(p{2}.y(1) - p{1}.y(1)));
