@@ -15,16 +15,26 @@ end
 
 [time, drift, drift_vel] = particle_drift(p1, p2);
 
+% check if reached bottom and don't plot after this
+hit_bottom = reached_bottom();
+if hit_bottom
+    [tb, ti] = reach_bottom_time;
+    inds = 1:ti;
+else
+    inds = 1:length(time);
+end
+
 figure(70)
 if ~multi_plot
     clf
 end
 
 subplot(2,1,1)
-if multi_plot
-    hold on
+hold on
+plot(time(inds), drift(inds) - drift(1)) % assuming D_p = 1
+if hit_bottom
+    plot(time(ti),drift(ti)-drift(1),'kx')
 end
-plot(time, drift - drift(1)) % assuming D_p = 1
 
 %xlabel('$t$')
 ylabel('$(l-l_0)/D_p$')
@@ -32,10 +42,11 @@ title('particle drift')
 grid on
 
 subplot(2,1,2)
-if multi_plot
-    hold on
+hold on
+plot(time(inds),drift_vel(inds))
+if hit_bottom
+    plot(time(ti),drift_vel(ti),'kx')
 end
-plot(time,drift_vel)
 
 xlabel('$t$')
 ylabel('$u_\textrm{drift}/w_s$','Interpreter','Latex')

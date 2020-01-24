@@ -15,16 +15,26 @@ end
 
 [time, sep, sep_vel] = particle_separation(p1, p2);
 
+% check if reached bottom and don't plot after this
+hit_bottom = reached_bottom();
+if hit_bottom
+    [tb, ti] = reach_bottom_time;
+    inds = 1:ti;
+else
+    inds = 1:length(time);
+end
+
 figure(67)
 if ~multi_plot
     clf
 end
 
 subplot(2,1,1)
-if multi_plot
-    hold on
+hold on
+plot(time(inds), sep(inds)-1) % assuming D_p = 1
+if hit_bottom
+    plot(time(ti),sep(ti)-1,'kx')
 end
-plot(time, sep-1) % assuming D_p = 1
 
 %xlabel('$t$')
 ylabel('$(s-D_p)/D_p$')
@@ -32,10 +42,11 @@ title('particle separation')
 grid on
 
 subplot(2,1,2)
-if multi_plot
-    hold on
+hold on
+plot(time(inds),sep_vel(inds))
+if hit_bottom
+    plot(time(ti),sep_vel(ti),'kx')
 end
-plot(time,sep_vel)
 
 xlabel('$t$')
 ylabel('$u_{sep}/w_s$')

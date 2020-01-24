@@ -1,4 +1,4 @@
-function [] = plot_particle_positions()
+function [] = plot_particle_relpath()
 % plot relative particle path of particle 0
 % with respect to particle 1
 
@@ -12,17 +12,26 @@ for mm = 1:N_files
     p{mm} = check_read_dat(fname);
 end
 
+% check if reached bottom and don't plot after this
+hit_bottom = reached_bottom();
+if hit_bottom
+    [tb, ti] = reach_bottom_time;
+    inds = 1:ti;
+else
+    inds = 1:length(time);
+end
+
 figure(71)
-%clf
+clf
 hold on
 
-time = p{1}.time;
+time = p{1}.time(inds);
 Nt = length(time);
 colormap(parula(Nt))
 cmap = colormap(parula(Nt));
-x = p{1}.x - p{2}.x;
-y = p{1}.y - p{2}.y;
-col = p{mm}.time;
+x = p{1}.x(inds) - p{2}.x(inds);
+y = p{1}.y(inds) - p{2}.y(inds);
+col = p{mm}.time(inds);
 scatter(x,y,[],col,'fill','SizeData',8)
 %plot(x,y,'k')
 plot(0, 0, 'ko')

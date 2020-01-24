@@ -1,0 +1,24 @@
+function reach_bottom = reached_bottom()
+% check if particles have reached the bottom
+% in the simulation
+
+particle_files = dir('mobile_*.dat');
+N_files = length(particle_files);
+
+% height above bottom
+% when particle 'feels' the bottom
+H = 3;
+
+height = zeros(1,N_files);
+for mm = 1:N_files
+    fname = sprintf('mobile_%d', mm-1);
+    p = check_read_dat(fname);
+    height(mm) = min(p.y);
+end
+
+if min(height) < H
+    reach_bottom = true;
+else
+    reach_bottom = false;
+end
+
