@@ -1,49 +1,50 @@
-function [time,sep, sep_vel] = plot_particle_separation(p1, p2, make_plot)
+function [] = plot_particle_separation(p1, p2, save_plot, multi_plot)
 % plot separation between two particles
 
 if nargin == 0
     p1 = 0;
     p2 = 1;
     make_plot = true;
+    save_plot = true;
+    multi_plot = false;
 elseif nargin == 2
     make_plot = true;
+    save_plot = true;
+    multi_plot = false;
 end
 
-p1_file = sprintf('mobile_%d.dat', p1);
-p2_file = sprintf('mobile_%d.dat', p2);
-p1_data = readtable(p1_file);
-p2_data = readtable(p2_file);
+[time, sep, sep_vel] = particle_separation(p1, p2);
 
-time = p1_data.time;
-
-sep = sqrt( (p1_data.x - p2_data.x).^2 ...
-           +(p1_data.y - p2_data.y).^2 ...
-           +(p1_data.z - p2_data.z).^2 );
-
-Dmat = FiniteDiff(time,1,2);
-sep_vel = Dmat * sep;
-
-if make_plot
-    figure(67)
+figure(67)
+if ~multi_plot
     clf
-    %hold on
+end
 
-    subplot(2,1,1)
-    plot(time, sep-1) % assuming D_p = 1
+subplot(2,1,1)
+if multi_plot
+    hold on
+end
+plot(time, sep-1) % assuming D_p = 1
 
-    %xlabel('$t$')
-    ylabel('$(s-D_p)/D_p$')
-    title('particle separation')
+%xlabel('$t$')
+ylabel('$(s-D_p)/D_p$')
+title('particle separation')
+grid on
 
-    subplot(2,1,2)
-    plot(time,sep_vel)
+subplot(2,1,2)
+if multi_plot
+    hold on
+end
+plot(time,sep_vel)
 
-    xlabel('$t$')
-    ylabel('$u_{sep}/w_s$')
-    title('separation velocity')
+xlabel('$t$')
+ylabel('$u_{sep}/w_s$')
+title('separation velocity')
+grid on
 
-    figure_defaults()
+figure_defaults()
 
+if save_plot
     check_make_dir('figures')
     cd('figures')
     print_figure('particle_separation','format','pdf','size',[6 4])
