@@ -1,4 +1,4 @@
-function data = plot_stat2d(group, field, t_index, varargin);
+function [data, vf, xvar, yvar] = plot_stat2d(group, field, t_index, varargin);
 % Plot a 2D statistic
 
 if nargin == 5
@@ -98,6 +98,7 @@ for ii = t_index
     pcolor(xvar, yvar, data'.*(1-vf'))
     shading flat
     %contour(xvar, yvar, data'.*(1-vf'), [1 1]*0.5)
+    %contour(xvar, yvar, data'.*(1-vf'), 20)
     if ~strcmp(group, 'integral_y')
         warning('off','MATLAB:contour:ConstantData')
         contour(xvar, yvar, (1-vf'),[1 1])

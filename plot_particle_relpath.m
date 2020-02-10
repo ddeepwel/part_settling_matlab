@@ -18,7 +18,7 @@ if hit_bottom
     [tb, ti] = reach_bottom_time;
     inds = 1:ti;
 else
-    inds = 1:length(time);
+    inds = 1:length(p{1}.time);
 end
 
 figure(71)
