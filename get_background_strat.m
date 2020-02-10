@@ -1,9 +1,17 @@
-function strat = get_background_strat(ii)
+function strat = get_background_strat(ii,file_prefix)
 % return the background stratification
 
-filename = sprintf('Data_%d.h5',ii);
-data = h5read(filename, '/Conc/0');
-% probably should only read what I need, but I'm too lazy right now
+if nargin == 1
+    file_prefix = 'Data2d';
+end
 
-strat = squeeze(data(1,:,1));
+filename = sprintf('%s_%d.h5',file_prefix,ii);
+if strncmp(filename,'Data2d',6)
+    data = h5read(filename, '/xy1/c0');
+    strat = squeeze(data(1,:));
+else
+    data = h5read(filename, '/Conc/0');
+    strat = squeeze(data(1,:,1));
+end
+
 
