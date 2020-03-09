@@ -1,6 +1,8 @@
 function [] = movie_particle_positions()
 % make a movie of particle positions
 
+params = read_params();
+y_pyc = params.pyc_location;
 
 particle_files = dir('mobile_*.dat');
 N_files = length(particle_files);
@@ -26,10 +28,11 @@ cd('tmp_figs')
 
 
 figure(68)
-Nframes = round(Nt/4);
-plot_times = linspace(0, time(end), Nframes);
-%plot_times = 0:1:time(end);
-%Nframes = length(plot_times);
+%Nframes = round(Nt/4);
+%plot_times = linspace(0, time(end), Nframes);
+%plot_times = 0:0.1:time(end);
+plot_times = linspace(0,time(end),200);
+Nframes = length(plot_times);
 for ii = 1:Nframes
     ind = nearest_index(time, plot_times(ii));
     t(ii) = time(ind);
@@ -42,7 +45,7 @@ for ii = 1:Nframes
 
     xlabel('$x/D_p$')
     ylabel('$y/D_p$')
-    title(sprintf('$t=%4.2f$',time(ind)))
+    title(sprintf('$t/\\tau=%4.2f$',time(ind)))
     axis image
     xl = xlim;
     yl = ylim;
@@ -50,6 +53,14 @@ for ii = 1:Nframes
     ylim(yl(1) + [-0.2 ysep+1])
 
     hold on
+    xl = xlim();
+    yl = ylim();
+    plot([0 0],yl,'k--')
+    if yl(1) < y_pyc && y_pyc < yl(2)
+        plot(xl, [1 1]*y_pyc,'k-')
+    end
+    % plot of deformed interface is not possible because
+    % it is not saved as frequently as the particle positions
     plot([0 0],ylim(),'k--')
     hold off
 

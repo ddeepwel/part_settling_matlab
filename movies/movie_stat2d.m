@@ -1,4 +1,4 @@
-function [] = make_movie(group, field)
+function [] = movie_stat2d(group, field)
 % MAKE_MOVIE     Make a movie of a 2D statistic
 %   make_movie uses ffmpeg to stitch frames together, so a working copy 
 %   of that is necessary.
@@ -36,7 +36,7 @@ switch field
 end
 
 if strcmp(group(1:2), 'xy')
-    figsize = [3 6];
+    figsize = [4 8];
 elseif strcmp(group(1:2), 'xz') || strcmp(group, 'integral_y')
     figsize = [5 5];
 end
@@ -59,7 +59,15 @@ outputs = first_out:last_out;
 % do loop
 for ii = outputs
     % make plot
-    plot_stat2d(group, field, ii, clim);
+    plot_stat2d(group, field, ii, 95, clim);
+
+    % adjust title for c0
+    ax = gca;
+    ttl = ax.Title.String;
+    switch field
+        case {'c0'}
+            ttl = ['$\rho',ttl(4:end)];
+    end
 
     % adjust to defaults
     axis image
@@ -68,7 +76,7 @@ for ii = outputs
     % save output figure
     cd('tmp_figs')
     filename = ['tmp_',num2str(ii,'%03d')];
-    print_figure(filename, 'format', 'png','size', figsize)
+    print_figure(filename, 'format', 'png','size', figsize,'res',600)
     cd('..')
 
     completion(ii-first_out+1, length(outputs))
@@ -79,10 +87,15 @@ check_make_dir('movies')
 % make movie and remove temporary files and folder
 cd('tmp_figs')
 filename = [field,'_',group];
-status = system(['ffmpeg -r ',num2str(framerate),...
-         ' -start_number ',num2str(first_out),' -i tmp_%03d.png',...
-         ' -r ',num2str(framerate),' -y -pix_fmt yuv420p -q 1',...
-         ' -vf scale=-1:600 ../movies/',filename,'.mp4']);
+%status = system(['ffmpeg -r ',num2str(framerate),...
+%         ' -start_number ',num2str(first_out),' -i tmp_%03d.png',...
+%         ' -r ',num2str(framerate),' -y -pix_fmt yuv420p -q 1',...
+%         ' -vf scale=-1:600 ../movies/',filename,'.mp4']);
+ffmpeg = sprintf(['ffmpeg -framerate %d -r %d '...
+    '-start_number %d -i tmp_%%03d.png -y -vcodec mpeg4 '...
+    '../movies/%s.mp4'], framerate, framerate, first_out, filename);
+fprintf([ffmpeg,'\n'])
+status = system(ffmpeg);
 if status ~= 0
     disp([filename,'.mp4 was possibly not rendered correctly.'])
 end
