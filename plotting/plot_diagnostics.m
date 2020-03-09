@@ -1,6 +1,6 @@
 % plot PARTIES diagnostics
 
-diagnos = table2struct(readtable('diagnostics.txt'), 'ToScalar', true);
+diagnos = table2struct(readtable('diagnostics.dat'), 'ToScalar', true);
 
 iter   = diagnos.Iter;
 time   = diagnos.Time;
