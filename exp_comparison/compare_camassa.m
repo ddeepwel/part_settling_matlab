@@ -5,8 +5,10 @@ base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/camassa/'
 
 sim_case = 'strat';
     t0 = -5;
-%sim_case = 'fig3';
-%    t0 = -1.5;
+sim_case = 'fig3';
+    t0 = -1.9;
+sim_case = 'fig3_better';
+    t0 = 2.9;
 
 exp_file = 'fig3_vel.csv';
 ws = 0.388;
