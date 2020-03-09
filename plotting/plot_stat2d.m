@@ -31,13 +31,13 @@ dz = gd.z(2) - gd.z(1);
 if strcmp(group(1:2), 'xy')
     xvar = gd.x - dx/2;
     yvar = gd.y - dy/2;
-    xlab = '$x$';
-    ylab = '$y$';
+    xlab = '$x/D_p$';
+    ylab = '$y/D_p$';
 elseif strcmp(group(1:2), 'xz') || strcmp(group, 'integral_y')
     xvar = gd.x - dx/2;
     yvar = gd.z - dz/2;
-    xlab = '$x$';
-    ylab = '$z$';
+    xlab = '$x/D_p$';
+    ylab = '$z/D_p$';
 end
 if strcmp(field, 'c0')
     cmap = cmocean('tempo');
@@ -66,7 +66,7 @@ for ii = t_index
         xsec1 = h5read(filename_2d, '/xy1/z');
         xsec2 = h5read(filename_2d, '/xy2/z');
         xsec = (xsec1 + xsec2)/2;
-        seclab = sprintf('$z=%2.0f$', xsec);
+        seclab = sprintf('$z/D_p=%2.0f$', xsec);
     elseif strcmp(field, 'KE_h')
         u = h5read(filename_2d, ['/',group,'/u']);
         w = h5read(filename_2d, ['/',group,'/w']);
@@ -76,7 +76,7 @@ for ii = t_index
         vf = h5read(filename_2d, ['/',group,'/vf']);
 
         xsec = h5read(filename_2d, ['/',group,'/y']);
-        seclab = sprintf('$y=%2.0f$', xsec);
+        seclab = sprintf('$y/D_p=%2.0f$', xsec);
     else
         data = h5read(filename_2d, fieldname);
         if strcmp(group, 'integral_y')
@@ -84,7 +84,7 @@ for ii = t_index
             seclab = '$\int dy$';
         else
             xsec = h5read(filename_2d, ['/',group,'/y']);
-            seclab = sprintf('$y=%2.0f$', xsec);
+            seclab = sprintf('$y/D_p=%2.0f$', xsec);
             % volume fraction
             vf = h5read(filename_2d, ['/',group,'/vf']);
         end
@@ -119,7 +119,7 @@ for ii = t_index
     if strcmp(field, 'c_curve_diag')
         field = '\textrm{c curvature}';
     end
-    ttl = sprintf('$%s$, $t$ = %2.2g, %s',field, time, seclab);
+    ttl = sprintf('$%s$, $t/\\tau$ = %2.2g, %s',field, time, seclab);
     title(ttl, 'Interpreter','Latex');
     figure_defaults()
 end

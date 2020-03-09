@@ -39,6 +39,8 @@ end
 %xlabel('$t$')
 ylabel('$(s-D_p)/D_p$')
 title('particle separation')
+yl = ylim();
+ylim([0 yl(2)])
 grid on
 
 subplot(2,1,2)
