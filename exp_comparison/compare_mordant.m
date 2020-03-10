@@ -37,5 +37,5 @@ figure_defaults()
 
 check_make_dir('../figures')
 orig_dir = cd('../figures');
-print_figure('Mordant2000','format','pdf','size',[6 4])
+print_figure('mordant_comparison','format','pdf','size',[6 4])
 cd(orig_dir)
