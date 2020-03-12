@@ -1,23 +1,27 @@
 % plot PARTIES diagnostics
 
-diagnos = table2struct(readtable('diagnostics.dat'), 'ToScalar', true);
+%diagnos = table2struct(readtable('diagnostics.dat'), 'ToScalar', true);
+diagnos = check_read_dat('diagnostics');
 
-iter   = diagnos.Iter;
-time   = diagnos.Time;
-max_c0 = diagnos.Max_c0;
-min_c0 = diagnos.Min_c0;
+iter   = diagnos.iter;
+time   = diagnos.time;
+max_c0 = diagnos.max_c0;
+min_c0 = diagnos.min_c0;
 
 
 figure(20)
 clf
+hold on
 
-subplot(2,1,1)
+%subplot(2,1,1)
 plot(time, max_c0-1)
-ylabel('max $c_0-1$')
-
-subplot(2,1,2)
-plot(time, min_c0)
+plot(time, abs(min_c0))
 xlabel('$t/\tau$')
-ylabel('min $c_0$')
+legend('max $c_0-1$','$|$min $c_0|$')
+legend('boxoff')
 
 figure_defaults()
+check_make_dir('figures')
+cd('figures')
+print_figure('diagnos_c0','format','pdf','size',[6 4])
+cd('..')
