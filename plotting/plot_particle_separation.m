@@ -1,4 +1,4 @@
-function [] = plot_particle_separation(p1, p2, save_plot, multi_plot)
+function p_h = plot_particle_separation(p1, p2, save_plot, multi_plot)
 % plot separation between two particles
 
 if nargin == 0
@@ -43,7 +43,7 @@ grid on
 
 subplot(2,1,2)
 hold on
-plot(time(inds),sep_vel(inds))
+p_h = plot(time(inds),sep_vel(inds));
 if hit_bottom
     plot(time(ti),sep_vel(ti),'kx')
 end

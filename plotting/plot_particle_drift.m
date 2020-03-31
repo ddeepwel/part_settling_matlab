@@ -1,4 +1,4 @@
-function [] = plot_particle_drift(p1, p2, save_plot, multi_plot)
+function p_h = plot_particle_drift(p1, p2, save_plot, multi_plot)
 % plot the drift of the particle pair
 
 if nargin == 0
@@ -41,7 +41,7 @@ grid on
 
 subplot(2,1,2)
 hold on
-plot(time(inds),drift_vel(inds))
+p_h = plot(time(inds),drift_vel(inds));
 if hit_bottom
     plot(time(ti),drift_vel(ti),'kx')
 end
