@@ -4,11 +4,9 @@ function [] = plot_particle_drift(p1, p2, save_plot, multi_plot)
 if nargin == 0
     p1 = 0;
     p2 = 1;
-    make_plot = true;
     save_plot = true;
     multi_plot = false;
 elseif nargin == 2
-    make_plot = true;
     save_plot = true;
     multi_plot = false;
 end
