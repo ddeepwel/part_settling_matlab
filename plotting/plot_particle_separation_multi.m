@@ -3,6 +3,7 @@
 % base directory, and which cases
 %base = '/project/6001470/ddeepwel/part_settling/2particles/no_strat/Re0.25/';
 base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/rho_s2.0/Ri40/Re0.25/';
+base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/rho_s2.0/Ri40/Re0.25/';
 
 %cases = {'D2_th0','D2_th22.5','D2_th45','D2_th90'};
 %cases = {'D4_th0','D4_th45','D4_th90'};

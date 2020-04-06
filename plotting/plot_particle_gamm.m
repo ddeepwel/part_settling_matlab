@@ -1,6 +1,9 @@
 % compare the particle separation for different stratifications (gamma)
 
-base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
+clear('p')
+
+%base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
+base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
 angle_dist = 's2_th45';
 cases = {...
     'gamm0.1',...
@@ -27,7 +30,7 @@ for mm = 1:length(cases)
 
     switch style
         case 'settling'
-            plot_settling(0);
+            plot_settling(1);
         case 'sep'
             p(mm) = plot_particle_separation(0, 1, false, true);
         case 'drift'

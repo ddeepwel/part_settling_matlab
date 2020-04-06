@@ -26,7 +26,7 @@ subplot(2,1,2)
 hold on
 plot(time, vel,'-')
 ylabel('$w_p/w_s$')
-xlabel('$t$')
+xlabel('$t/\tau$')
 title('particle velocity')
 grid on
 
