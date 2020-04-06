@@ -2,8 +2,8 @@
 % side-by-side configuration
 
 % variable parameters
-Fr_doost = 20;
-Lz_Dp = 20; % vertical length in particle diameters
+Fr_doost = 1/0;
+Lz_Dp = 40; % vertical length in particle diameters
 
 % fixed parameters
 g = 9.81;
@@ -27,7 +27,7 @@ Ri = Lz_Dp * W^2/Ws^2 * Fr_doost^(-2);
 S0 = 1.2;
 
 % particle positions
-y_0= 0.75 * Lz_Dp;
+y_0= Lz_Dp - 6;
 x1 = 0;
 y1 = y_0;
 x2 = x1 + S0;
