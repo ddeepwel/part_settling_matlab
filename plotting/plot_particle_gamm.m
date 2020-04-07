@@ -13,7 +13,15 @@ cases = {...
     'gamm0.9',...
     };
 
-style = 'sep';
+labs = {...
+    '$\gamma = 0.1$',...
+    ...%'$\gamma = 0.3$',...
+    '$\gamma = 0.5$',...
+    '$\gamma = 0.7$',...
+    '$\gamma = 0.9$',...
+    };
+
+style = 'drift';
 
 switch style
     case 'settling'
@@ -27,7 +35,6 @@ clf
 
 for mm = 1:length(cases)
     cd([base,cases{mm},'/',angle_dist])
-
     switch style
         case 'settling'
             plot_settling(1);
@@ -36,14 +43,28 @@ for mm = 1:length(cases)
         case 'drift'
             p(mm) = plot_particle_drift(0, 1, false, true);
     end
+
+    % plot the single particle as a dashed line
+    cd([base,cases{mm},'/1prt'])
+    switch style
+        %case 'settling'
+        %    plot_settling(0);
+        %case 'sep'
+            %p(mm) = plot_particle_separation(0, 1, false, true);
+        %case 'drift'
+            %p(mm) = plot_particle_drift(0, 1, false, true);
+    end
 end
 
 try
-    leg = legend(p, cases);
+    leg = legend(p, labs);
 catch
-    leg = legend(cases);
+    leg = legend(labs);
 end
 leg.Location = 'best';
+leg.Box = 'off';
+
+figure_defaults()
 
 check_make_dir('../../figures')
 cd('../../figures')

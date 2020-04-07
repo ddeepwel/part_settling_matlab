@@ -25,18 +25,27 @@ figure(165)
 clf
 hold on
 
+cols = default_line_colours();
+
 for mm = 1:length(cases)
     cd([base,cases{mm},'/',angle_dist])
+    [t_p0, y_p0, v_p0] = settling(0);
+    [t_p1, y_p1, v_p1] = settling(1);
+    p(mm) = plot(t_p0, (v_p0+v_p1)/2, 'Color', cols(mm,:));
 
-    [time, y_p, v_p] = settling(1);
-    plot(time, v_p)
+    % plot the settling of just a single particle in a dashed line
+    cd([base,cases{mm},'/1prt'])
+    [time, y_p, v_p] = settling(0);
+    plot(time, v_p,'--', 'Color', cols(mm,:))
 end
+
+xlim([0 100])
 
 xlabel('$t/\tau$')
 ylabel('$w_p/w_s$')
 
-leg = legend(labs);
-leg.Location = 'best';
+leg = legend(p, labs);
+leg.Location = 'SouthEast';
 leg.Box = 'off';
 figure_defaults
 
