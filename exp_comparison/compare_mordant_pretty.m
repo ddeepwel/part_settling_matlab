@@ -1,6 +1,7 @@
 % compare the settling from Parties and Camassa 2010
 
-base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/mordant/';
+%base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/mordant/';
+base = '/home/ddeepwel/scratch/bsuther/part_settling/comparisons_and_checks/mordant/';
 
 sim_cases = {'midres'};
 
@@ -24,6 +25,7 @@ exp_vel  = dat.Var2;
 
 plot([0 50],[1 1]*-1,'Color',[1 1 1]*0.5);
 
+mm = 1;
 cd([base,sim_cases{mm}])
 [t,y,v] = settling;
 p1 = plot(t,v, 'Color', cols(mm,:));
