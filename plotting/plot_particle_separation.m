@@ -37,8 +37,8 @@ end
 %xlabel('$t$')
 ylabel('$(s-D_p)/D_p$')
 title('particle separation')
-yl = ylim();
-ylim([0 yl(2)])
+%yl = ylim();
+%ylim([0 yl(2)])
 grid on
 
 subplot(2,1,2)
@@ -48,7 +48,7 @@ if hit_bottom
     plot(time(ti),sep_vel(ti),'kx')
 end
 
-xlabel('$t$')
+xlabel('$t/\tau$')
 ylabel('$u_{sep}/w_s$')
 title('separation velocity')
 grid on
