@@ -6,7 +6,11 @@ if nargin == 0
 end
 
 params = read_params();
-y_pyc = params.pyc_location;
+if isfield(params, 'pyc_location')
+    y_pyc = params.pyc_location;
+else
+    disp('pyc_location not defined in parties.inp')
+end
 
 [time, y_p, vel] = settling(particle_ID);
 
@@ -16,7 +20,9 @@ figure(65)
 subplot(2,1,1)
 hold on
 plot(time, y_p,'-')
-plot([0 time(end)], [1 1]*y_pyc,'k--')
+if isfield(params, 'pyc_location')
+    plot([0 time(end)], [1 1]*y_pyc,'k--')
+end
 fprintf('Initial particle position: %g D_p\n',y_p(1))
 ylabel('$h_p/D_p$')
 title('particle height')

@@ -49,8 +49,8 @@ leg.Location = 'SouthEast';
 leg.Box = 'off';
 figure_defaults
 
-check_make_dir('../../figures')
-cd('../../figures')
+check_make_dir('../figures')
+cd('../figures')
 fname = sprintf('part_settling_gamma_%s_nice',angle_dist);
 print_figure(fname,'format','pdf','size',[6 4])
 %cd('..')
