@@ -57,7 +57,7 @@ for mm = 1:length(sim_cases)
     else
         legend([p1 p2],'Present study','ten Cate \emph{et al.} (2002)')
         legend('boxoff')
-        xlim([0 10])
+        xlim([0 6])
         ylim([-1.2 0])
         yticklabels([])
     end
