@@ -1,19 +1,26 @@
 function [data, vf, xvar, yvar] = plot_stat2d(group, field, t_index, varargin);
 % Plot a 2D statistic
 
-if nargin == 5
+if nargin == 6
+    fnum  = varargin{1};
+    clim  = varargin{2};
+    style = varargin{3};
+elseif nargin == 5
+    fnum  = varargin{1};
+    clim  = varargin{2};
+    style = 'pcolor';
+elseif nargin ==4;
     fnum = varargin{1};
-    clim = varargin{2};
-else
-    if nargin == 4
-        fnum = varargin{1};
-    else
-        fnum = 95;
-    end
     if strcmp(field, 'c0')
         clim = [0 1];
-    elseif strcmp(field, 'KE_h')
+    else
         clim = 'auto';
+    end
+else
+    fnum = 95;
+    style = 'pcolor';
+    if strcmp(field, 'c0')
+        clim = [0 1];
     else
         clim = 'auto';
     end
@@ -95,14 +102,38 @@ for ii = t_index
     figure(fnum)
     clf
     hold on
-    pcolor(xvar, yvar, data'.*(1-vf'))
+    switch style
+        case 'pcolor'
+            pcolor(xvar, yvar, data'.*(1-vf'))
+        case 'contourf'
+            contourf(xvar, yvar, data'.*(1-vf'),51)
+        case 'contour'
+            contour(xvar, yvar, data'.*(1-vf'),10)
+    end
     shading flat
     %contour(xvar, yvar, data'.*(1-vf'), [1 1]*0.5)
     %contour(xvar, yvar, data'.*(1-vf'), 20)
+
+    % add particle positions
     if ~strcmp(group, 'integral_y')
-        warning('off','MATLAB:contour:ConstantData')
-        contour(xvar, yvar, (1-vf'),[1 1])
-        warning('on','MATLAB:contour:ConstantData')
+        if strncmp(group(1:2), 'xy',2)
+            particle_files = dir('mobile_*.dat');
+            N_files = length(particle_files);
+            p = cell(1, N_files);
+            for mm = 1:N_files
+                fname = sprintf('mobile_%d', mm-1);
+                p{mm} = check_read_dat(fname);
+                x = p{mm}.x;
+                y = p{mm}.y;
+                ind = nearest_index(p{1}.time, time);
+                viscircles([x(ind) y(ind)],0.5, 'Color', [0 0 0], 'LineWidth', 1);
+            end
+        else
+            % contours do not seem to work very well
+            %warning('off','MATLAB:contour:ConstantData')
+            %contour(xvar, yvar, (1-vf'),[1 1])
+            %warning('on','MATLAB:contour:ConstantData')
+        end
     end
 
     colorbar
