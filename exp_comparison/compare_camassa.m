@@ -1,7 +1,10 @@
 % compare the settling from Parties and Camassa 2010
 
+%base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/camassa/';
+base = '/home/ddeepwel/scratch/bsuther/part_settling/comparisons_and_checks/camassa/';
+%base = '/Users/daviddeepwell/ComputeCanada/graham_scratch/bsuther/part_settling/comparisons_and_checks/camassa/';
 
-base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/camassa/';
+sim_case = 'fig3_better';
 
 sim_case = 'strat';
     t0 = -5;
