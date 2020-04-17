@@ -19,7 +19,7 @@ hold on
 
 plot(time, volume * 6/pi)
 
-ylabel('max $V_\textrm{entrain} / V_p$','Interpreter','latex')
+ylabel('$V_\textrm{entrain} / V_p$','Interpreter','latex')
 xlabel('$t/\tau$')
 xlim([0 50])
 

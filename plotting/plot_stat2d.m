@@ -1,4 +1,4 @@
-function [data, vf, xvar, yvar] = plot_stat2d(group, field, t_index, varargin);
+function [data, vf, xvar, yvar, xy_p] = plot_stat2d(group, field, t_index, varargin);
 % Plot a 2D statistic
 
 if nargin == 6
@@ -29,6 +29,7 @@ end
 % load grid
 filename_2d = sprintf('Data2d_%d.h5',t_index(1));
 gd = read_grid(filename_2d);
+par = read_params();
 
 % select grid variables and labels
 % shift grid so that ticks show up nicely
@@ -126,7 +127,8 @@ for ii = t_index
                 x = p{mm}.x;
                 y = p{mm}.y;
                 ind = nearest_index(p{1}.time, time);
-                viscircles([x(ind) y(ind)],0.5, 'Color', [0 0 0], 'LineWidth', 1);
+                xy_p(mm,:) = [x(ind) y(ind)];
+                viscircles(xy_p(mm,:), 0.5, 'Color', [0 0 0], 'LineWidth', 1);
             end
         else
             % contours do not seem to work very well
@@ -150,7 +152,11 @@ for ii = t_index
     if strcmp(field, 'c_curve_diag')
         field = '\textrm{c curvature}';
     end
-    ttl = sprintf('$%s$, $t/\\tau$ = %2.2g, %s',field, time, seclab);
+    if par.output_time_interval_2d < 1
+        ttl = sprintf('$%s$, $t/\\tau$ = %4.2f, %s',field, time, seclab);
+    else
+        ttl = sprintf('$%s$, $t/\\tau$ = %2.2f, %s',field, time, seclab);
+    end
     title(ttl, 'Interpreter','Latex');
     figure_defaults()
 end

@@ -18,6 +18,7 @@ labs = {...
     '$\theta = 45^\circ$',...
     '$\theta = 22.5^\circ$',...
     '$\theta = 0^\circ$',...
+    '1 particle',...
     };
 
 style = 'entrain';
@@ -51,6 +52,9 @@ end
 % plot the single particle as a dashed line
 cd([base,gamm,'/1prt'])
 switch style
+    case 'entrain'
+        load('entrained_fluid')
+        plot(time, volume * 6/pi, 'k')
     %case 'settling'
     %    plot_settling(0);
     %case 'sep'
