@@ -59,13 +59,13 @@ outputs = first_out:last_out;
 % do loop
 for ii = outputs
     % make plot
-    plot_stat2d(group, field, ii, 95, clim);
+    plot_stat2d(group, field, ii, 95, clim, 'contourf');
 
     % adjust title for c0
     ax = gca;
     ttl = ax.Title.String;
     switch field
-        case {'c0'}
+        case 'c0'
             ttl = ['$\rho',ttl(4:end)];
     end
 
@@ -87,17 +87,15 @@ check_make_dir('movies')
 % make movie and remove temporary files and folder
 cd('tmp_figs')
 filename = [field,'_',group];
-%status = system(['ffmpeg -r ',num2str(framerate),...
-%         ' -start_number ',num2str(first_out),' -i tmp_%03d.png',...
-%         ' -r ',num2str(framerate),' -y -pix_fmt yuv420p -q 1',...
-%         ' -vf scale=-1:600 ../movies/',filename,'.mp4']);
-ffmpeg = sprintf(['ffmpeg -framerate %d -r %d '...
-    '-start_number %d -i tmp_%%03d.png -y -vcodec mpeg4 '...
+ffmpeg = sprintf(['ffmpeg -framerate %d -r %d ',...
+    '-start_number %d -i tmp_%%03d.png -y -vcodec mpeg4 -q 1 ',...
     '../movies/%s.mp4'], framerate, framerate, first_out, filename);
-fprintf([ffmpeg,'\n'])
+disp(ffmpeg)
 status = system(ffmpeg);
 if status ~= 0
     disp([filename,'.mp4 was possibly not rendered correctly.'])
+    cd('..')
+else
+    cd('..')
+    rmdir('tmp_figs','s')
 end
-cd('..')
-rmdir('tmp_figs','s')
