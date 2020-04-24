@@ -1,4 +1,4 @@
-function reach_bottom = reached_bottom()
+function reach_bottom = reached_bottom(H)
 % check if particles have reached the bottom
 % in the simulation
 
@@ -7,7 +7,9 @@ N_files = length(particle_files);
 
 % height above bottom
 % when particle 'feels' the bottom
-H = 3;
+if nargin == 0
+    H = 3;
+end
 
 height = zeros(1,N_files);
 for mm = 1:N_files
