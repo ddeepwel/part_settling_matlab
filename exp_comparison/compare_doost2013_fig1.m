@@ -5,14 +5,19 @@
 %base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/Doost2013-2parts/';
 base = '/home/ddeepwel/scratch/bsuther/part_settling/comparisons_and_checks/Doost2013-2parts/';
 cases = {
-    'Frinf',...
+    'Frinf_tall',...
     'Fr20',...
-    'Fr20_dx50',...
+    ...%'Fr20_dx50',...
     };
 lab = {
     '$Fr = \infty$',...
     '$Fr = 20$',...
-    '$Fr = 20$, dx=50',...
+    ...%'$Fr = 20$, dx=50',...
+    };
+% comparison files
+files = {...
+    'Doost2013_fig1_Frinf.csv',...
+    'Doost2013_fig1_Fr20.csv',...
     };
 
 Ncases = length(cases);
@@ -45,10 +50,6 @@ tt = t_parties / t_doost; %18 / (rho_s-1) * nu / sqrt(dp^3 * g);
 cd('../../Doost2013')
 
 cols = default_line_colours();
-files = {...
-    'Doost2013_fig1_Frinf.csv',...
-    'Doost2013_fig1_Fr20.csv',...
-    };
 
 for mm = 1:length(files)
     dat = readtable(files{mm});
@@ -60,8 +61,9 @@ end
 ylabel('$(s-D_p)/D_p$')
 xlabel('$t/\tau$')
 %grid on
-%xlim([0 20])
+xlim([0 150])
 leg = legend(lab);
+leg.Box = 'off';
 %leg.Location = 'EastOutside';
 %leg.String = leg.String{1:end-1};
 
@@ -70,5 +72,5 @@ leg = legend(lab);
 figure_defaults()
 check_make_dir('../figures');
 cd('../figures')
-%print_figure('Doost2013_fig1','format','pdf','size',[8 4])
+print_figure('Doost2013_fig1','format','pdf','size',[6 4])
 
