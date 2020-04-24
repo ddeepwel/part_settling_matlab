@@ -1,4 +1,4 @@
-function min_sep = min_part_sep()
+function [min_sep, min_sep_time] = min_part_sep()
 % measure the minimum particle separation
 
 [time, sep, sep_vel] = particle_separation();

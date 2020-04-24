@@ -70,6 +70,7 @@ for ii = outputs
     end
 
     % adjust to defaults
+    set(gca,'TickDir','out')
     axis image
     figure_defaults()
 

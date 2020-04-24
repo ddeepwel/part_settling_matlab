@@ -28,6 +28,6 @@ figure_defaults();
 if save_plot
     check_make_dir('figures')
     cd('figures')
-    %print_figure('entrain','format','pdf','size',[6 4])
+    print_figure('entrain','format','pdf','size',[6 4])
     cd('..')
 end
