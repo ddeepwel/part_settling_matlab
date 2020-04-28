@@ -11,15 +11,16 @@ elseif nargin == 5
     style = 'pcolor';
 elseif nargin ==4;
     fnum = varargin{1};
-    if strcmp(field, 'c0')
+    if strcmp(field, 'c0') || strcmp(field, 'c1')
         clim = [0 1];
     else
         clim = 'auto';
     end
+    style = 'pcolor';
 else
     fnum = 95;
     style = 'pcolor';
-    if strcmp(field, 'c0')
+    if strcmp(field, 'c0') || strcmp(field, 'c1')
         clim = [0 1];
     else
         clim = 'auto';
@@ -47,7 +48,7 @@ elseif strcmp(group(1:2), 'xz') || strcmp(group, 'integral_y')
     xlab = '$x/D_p$';
     ylab = '$z/D_p$';
 end
-if strcmp(field, 'c0')
+if strcmp(field, 'c0') || strcmp(field, 'c1')
     cmap = cmocean('tempo');
 elseif strcmp(field, 'KE_h')
     cmap = cmocean('-ice');
@@ -96,6 +97,9 @@ for ii = t_index
             % volume fraction
             vf = h5read(filename_2d, ['/',group,'/vf']);
         end
+    end
+    if strcmp(field, 'c1')
+        data = 1-data;
     end
     time = h5read(filename_2d, '/time');
 
