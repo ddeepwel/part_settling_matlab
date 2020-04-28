@@ -5,8 +5,9 @@ clear('p')
 
 %base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
 base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
-angle_dist = 's2_th0';
+angle_dist = 's2_th0_entr';
 cases1 = {...
+    'gamm1.0',...
     'gamm0.9',...
     'gamm0.7',...
     'gamm0.5',...
@@ -14,20 +15,21 @@ cases1 = {...
     'gamm0.1',...
     };
 labs1 = {...
-    '$\gamma = 0.9$',...
-    '$\gamma = 0.7$',...
-    '$\gamma = 0.5$',...
-    ...%'$\gamma = 0.3$',...
-    '$\gamma = 0.1$',...
+    '$\Gamma = 0.0$',...
+    '$\Gamma = 0.1$',...
+    '$\Gamma = 0.3$',...
+    '$\Gamma = 0.5$',...
+    ...%'$\Gamma = 0.7$',...
+    '$\Gamma = 0.9$',...
     };
 
 gamm = 'gamm0.9';
 cases2 = {...
-    's2_th0',...
-    's2_th22.5',...
-    's2_th45',...
-    's2_th67.5',...
-    's2_th90',...
+    's2_th0_entr',...
+    's2_th22.5_entr',...
+    's2_th45_entr',...
+    's2_th67.5_entr',...
+    's2_th90_entr',...
     };
 labs2 = {...
     '$\theta = 0^\circ$',...
@@ -43,11 +45,11 @@ clf
 cols = default_line_colours();
 
 for mm = 1:length(cases1)
-    if strcmp(cases1{mm},'gamm0.7')
-        cd([base,cases1{mm},'/',angle_dist,'_cfl0.25'])
-    else
+    %if strcmp(cases1{mm},'gamm0.7')
+    %    cd([base,cases1{mm},'/',angle_dist,'_cfl0.25'])
+    %else
         cd([base,cases1{mm},'/',angle_dist])
-    end
+    %end
     [time, sep, sep_vel] = particle_separation();
     % check if reached bottom and don't plot after this
     hit_bottom = reached_bottom(4);
@@ -60,7 +62,11 @@ for mm = 1:length(cases1)
 
     subplot(2,2,1)
     hold on
-    p1(mm) = plot(time(inds), sep(inds)-1, 'Color', cols(mm,:));
+    if strcmp(cases1{mm}, 'gamm1.0')
+        p1(mm) = plot(time(inds), sep(inds)-1, 'k');
+    else
+        p1(mm) = plot(time(inds), sep(inds)-1, 'Color', cols(mm-1,:));
+    end
     xlim([0 60])
     ylim([0 3])
     ylabel('$(s-D_p)/D_p$')
@@ -76,7 +82,11 @@ for mm = 1:length(cases1)
 
     subplot(2,2,3)
     hold on
-    p3(mm) = plot(time(inds), sep_vel(inds), 'Color', cols(mm,:));
+    if strcmp(cases1{mm}, 'gamm1.0')
+        p3(mm) = plot(time(inds), sep_vel(inds), 'k');
+    else
+        p3(mm) = plot(time(inds), sep_vel(inds), 'Color', cols(mm,:));
+    end
     plot([0 100],[0 0],'Color',[1 1 1]*0.5)
     xlim([0 60])
     ylim([-0.4 0.2])
@@ -93,6 +103,7 @@ end
 leg = legend(p3, labs1);
 leg.Location = 'SouthEast';
 leg.Box = 'off';
+leg.NumColumns = 2;
 xshift = 0.03;
 zshift = 0.017;
 shift_axis(xshift,+zshift)
@@ -114,7 +125,11 @@ for mm = 1:length(cases2)
 
     subplot(2,2,2)
     hold on
-    p2(mm) = plot(time(inds), sep(inds)-1, 'Color', cols(mm,:));
+    if mod(mm,2) == 1
+        p2(mm) = plot(time(inds), sep(inds)-1, 'Color', cols(mm,:));
+    else
+        p2(mm) = plot(time(inds), sep(inds)-1, '--', 'Color', cols(mm,:));
+    end
     xlim([0 25])
     ylim([0 3])
     %ylabel('$(s-D_p)/D_p$')
@@ -129,7 +144,11 @@ for mm = 1:length(cases2)
 
     subplot(2,2,4)
     hold on
-    p4(mm) = plot(time(inds), sep_vel(inds), 'Color', cols(mm,:));
+    if mod(mm,2) == 1
+        p4(mm) = plot(time(inds), sep_vel(inds), 'Color', cols(mm,:));
+    else
+        p4(mm) = plot(time(inds), sep_vel(inds), '--', 'Color', cols(mm,:));
+    end
     plot([0 100],[0 0],'Color',[1 1 1]*0.5)
     xlim([0 25])
     ylim([-0.4 0.2])

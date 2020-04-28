@@ -1,4 +1,4 @@
-function [] = plot_entrain(save_plot, multi_plot)
+function [] = plot_entrain_vol(save_plot, multi_plot)
 % plot the volume entrainment
 % the volume rho<rho(z_pyc) that is below the centre of the pycnocline (z_pyc)
 
