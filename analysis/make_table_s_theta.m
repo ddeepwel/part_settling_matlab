@@ -4,13 +4,19 @@
 base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
 
 gamm = 'gamm0.9';
-ss = [2 4 6];
+ss = [2 4 6 8];
 thetas = [0 22.5 45 67.5 90];
+suffix = {{'_entr','_entr','_entr','_entr','_entr'},...
+    {'_tall','','','',''},...
+    {'_tall','_tall','','',''},...
+    {'_tall','_tall','_tall','',''},...
+    };
 
 Nss = length(ss);
 Nthetas = length(thetas);
 
-style = 'entrain_mass';
+style = 'entrain_mass_dist';
+dist = 15; % for entrain_mass_dist only
 
 switch style
     case 'sep'
@@ -21,15 +27,17 @@ switch style
         max_entrain = zeros(Nss,Nthetas) * NaN;
     case 'entrain_mass'
         entrain_final = zeros(Nss,Nthetas) * NaN;
+    case 'entrain_mass_dist'
+        entrain_dist = zeros(Nss,Nthetas) * NaN;
+        dist_meas    = zeros(Nss,Nthetas) * NaN;
 end
 near_bottom = zeros(Nss,Nthetas) * NaN;
+need_longer = zeros(Nss,Nthetas) * NaN;
 
 for mm = 1:Nss
     for nn = 1:Nthetas
-        %if mm > 1 && (nn == 2 || nn == 4)
-        %    continue
-        %end
-        direc = sprintf('%s/%s/s%d_th%g',base,gamm,ss(mm),thetas(nn));
+        direc = sprintf('%s/%s/s%d_th%g%s',base,gamm,ss(mm),thetas(nn),suffix{mm}{nn});
+        disp(direc)
         cd(direc)
         switch style
             case 'sep'
@@ -44,6 +52,10 @@ for mm = 1:Nss
             case 'entrain_mass'
                 [val, val_time] = get_entrain_mass_final();
                 entrain_final(mm,nn) = val(end);
+            case 'entrain_mass_dist'
+                [val, val_dist] = get_entrain_mass_dist(dist);
+                entrain_dist(mm,nn) = val(end);
+                dist_meas(mm,nn) = val_dist;
         end
 
         % check if minimum distance was near end of simulation
@@ -54,6 +66,10 @@ for mm = 1:Nss
                 if abs(diff(val)) / val(end) > 0.05
                     need_longer(mm,nn) = 1;
                 end
+            case 'entrain_mass_dist'
+                if val_dist < 0.93*dist
+                   need_longer(mm,nn) = 1;
+               end 
             otherwise
                 ts = settling(0);
                 tf = ts(end);
@@ -80,4 +96,7 @@ switch style
     case 'entrain_mass'
         fname = ['entrain_final_',strrep(gamm,'.','')];
         save(fname,'entrain_final','ss','thetas','gamm','need_longer')
+    case 'entrain_mass_dist'
+        fname = ['entrain_dist_',strrep(gamm,'.','')];
+        save(fname,'entrain_dist','ss','thetas','gamm','need_longer','dist','dist_meas')
 end
