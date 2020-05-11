@@ -2,7 +2,9 @@
 figure(65)
 clf
 plot_settling(0);
-plot_settling(1);
+try
+    plot_settling(1);
+end
 
 check_make_dir('figures')
 cd('figures')

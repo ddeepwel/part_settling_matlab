@@ -61,6 +61,7 @@ for mm = 1:length(cases1)
     gam = 1 - Ri(1) * Re / 18;
     %vol = entr.volume * 6/pi * (1-gam) * (1-1/rho_s);
     vol = entr.volume * 6/pi;
+    %vol = entr.volume * (80e-6)^3;
     % check if reached bottom and don't plot after this
     %hit_bottom = reached_bottom(4);
     %if hit_bottom
@@ -93,14 +94,21 @@ xlim([0 40])
 ylim([0 30])
 xlabel('$t/\tau$')
 %ylabel('$M_\mathrm{entrain}/M_p$','Interpreter','Latex')
-ylabel('$$','Interpreter','Latex')
+ylabel('$C_\mathrm{entrain}/V_p$ (m$^{-3}$)','Interpreter','Latex')
+%ylabel('$C_\mathrm{entrain}$','Interpreter','Latex')
+set(gca,'XMinorTick','on','YMinorTick','on')
+yticks(0:10:30)
+ax = gca;
+ax.XAxis.MinorTickValues = 5:5:40;
+ax.YAxis.MinorTickValues = 5:10:25;
+set(gca,'TickLength',[0.02 0.05]);
 
 leg = legend(p, labs1);
 leg.Location = 'NorthEast';
 leg.Box = 'off';
-%set(gca,'XMinorTick','on','YMinorTick','on')
-xlab = -0.25;
+xlab = -0.2;
 zlab = 0.94;
+text(gca,6,0,'*','VerticalAlignment','top');
 text(gca,xlab,zlab,subplot_labels(1),...
             'Color','k','Units','normalized','Interpreter','Latex')
 
@@ -128,13 +136,20 @@ end
 xlim([0 40])
 ylim([0 30])
 yticklabels([])
+yticks(0:10:30)
 xlabel('$t/\tau$')
 %ylabel('$w_p/w_s$')
+set(gca,'XMinorTick','on','YMinorTick','on')
+ax = gca;
+ax.XAxis.MinorTickValues = 5:5:40;
+ax.YAxis.MinorTickValues = 5:10:25;
+set(gca,'TickLength',[0.02 0.05]);
 
 leg = legend(p(end:-1:1), {labs2{end:-1:1}});
 leg.Location = 'NorthEast';
 leg.Box = 'off';
 xlab = -0.15;
+text(gca,6,0,'*','VerticalAlignment','top');
 text(gca,xlab,zlab,subplot_labels(2),...
             'Color','k','Units','normalized','Interpreter','Latex')
 
