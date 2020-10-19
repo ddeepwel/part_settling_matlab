@@ -7,11 +7,11 @@
 
 theta = linspace(0,90,1024);
 
-u_v1 = n1 + m1 * cosd(theta);
+u_v1 = n1 + m1 * cosd(theta).^2;
 u_h1 =      m1 * sind(theta).*cosd(theta);
-u_v2 = n2 + m2 * cosd(theta);
+u_v2 = n2 + m2 * cosd(theta).^2;
 u_h2 =      m2 * sind(theta).*cosd(theta);
-u_v3 = n3 + m3 * cosd(theta);
+u_v3 = n3 + m3 * cosd(theta).^2;
 u_h3 =      m3 * sind(theta).*cosd(theta);
 
 
@@ -23,21 +23,21 @@ plot(theta, u_v1)
 plot(theta, u_v2)
 plot(theta, u_v3)
 xlim([0 90])
-ylim([1 1.4])
+ylim([1 1.5])
 xlabel('$\theta$ ($^\circ$)')
 ylabel('$u_v/w_s$')
-leg = legend({'$\tilde{s} = 1/4$','$\tilde{s} = 1/8$','$\tilde{s} = 1/16$'},'Interpreter','Latex');
+leg = legend({'$\tilde{s} = 1/4,~(s/D_p=1)$','$\tilde{s} = 1/8,~ (s/D_p=3)$','$\tilde{s} = 1/16,~(s/D_p=7)$'},'Interpreter','Latex');
 leg.Box = 'off';
-leg.Location = 'NorthEast';
+leg.Location = 'North';
 pos = leg.Position;
 pos(2) = pos(2) + 0.01;
 leg.Position = pos;
 ax = gca;
 set(gca,'XMinorTick','on','YMinorTick','on')
 xticks(0:45:90)
-yticks(1:0.1:1.4)
+yticks(1:0.1:1.5)
 ax.XAxis.MinorTickValues = 22.5:45:90;
-ax.YAxis.MinorTickValues = 1.05:0.1:1.4;
+ax.YAxis.MinorTickValues = 1.05:0.1:1.5;
 xlab = -0.22;
 zlab = 0.88;
 text(gca,xlab,zlab,subplot_labels(1),...
