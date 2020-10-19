@@ -1,11 +1,11 @@
 % Plot a 2D cross-section of 3D field
 
 % options
-%field = 'Conc/0';
-field = 'Conc/1';
+field = 'Conc/0';
+%field = 'Conc/1';
 plane = 'z';
 val = -0;
-outputs = 0:6;
+outputs = 11;
 
 % setup
 fieldname = ['/',field];

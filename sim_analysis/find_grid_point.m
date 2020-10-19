@@ -1,4 +1,4 @@
-function [xmax_xind, max_yind, max_zind, min_xind, min_yind, min_zind] =  find_grid_point(ii)
+function [max_xind, max_yind, max_zind, min_xind, min_yind, min_zind] =  find_grid_point(ii)
 % find the grid location where the density is a maximum
 
 params = read_params();

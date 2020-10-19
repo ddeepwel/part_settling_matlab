@@ -12,7 +12,7 @@ cases1 = {...
     'gamm0.7',...
     'gamm0.5',...
     'gamm0.3',...
-    %'gamm0.1',...
+    'gamm0.1',...
     };
 labs1 = {...
     ...%'$\Gamma = 0.0$',...
@@ -20,14 +20,14 @@ labs1 = {...
     '$\Gamma = 0.3$',...
     '$\Gamma = 0.5$',...
     '$\Gamma = 0.7$',...
-    %'$\Gamma = 0.9$',...
+    '$\Gamma = 0.9$',...
     };
 suffix = {...
     '_dx30',...
+    '_entr',...
+    '_entr',...
     '_dx25',...
-    '_dx25',...
-    '_dx25',...
-    %'_dx25',...
+    '_entr',...
     };
 
 gamm = 'gamm0.9';
@@ -78,17 +78,24 @@ for mm = 1:length(cases1)
     %else
         p(mm) = plot(time, vol, 'Color', cols(mm,:));
     %end
-    
 
-    % plot time when trailing particle is 15 D_p below interface
-    [t,yp] = settling(0);
-    yi = par.pyc_location;
-    ind15 = nearest_index(yp,yi-15);
-    tind = nearest_index(time,t(ind15));
-    plot(time(tind),vol(tind),'o','Color',cols(mm,:),'MarkerFaceColor',cols(mm,:),'MarkerSize',3)
+    % plot the settling of just a single particle in a dashed line
+    cd([base,cases1{mm},'/1prt_dx25'])
+    entr = load('entrained_tracer');
+    time = entr.time;
+    vol = entr.volume * 6/pi * 2;
+    % check if reached bottom and don't plot after this
+    %hit_bottom = reached_bottom();
+    %if hit_bottom
+    %    [~, ti] = reach_bottom_time();
+    %    inds = 1:ti;
+    %else
+    %    inds = 1:length(time);
+    %end
+    plot(time, vol, '--', 'Color', cols(mm,:));
 end
 
-xlim([0 150])
+xlim([0 40])
 ylim([0 30])
 xlabel('$t/\tau$')
 %ylabel('$M_\mathrm{entrain}/M_p$','Interpreter','Latex')
@@ -97,7 +104,7 @@ ylabel('$C_\mathrm{entrain}/V_p$','Interpreter','Latex')
 set(gca,'XMinorTick','on','YMinorTick','on')
 yticks(0:10:30)
 ax = gca;
-ax.XAxis.MinorTickValues = 25:50:125;
+ax.XAxis.MinorTickValues = 5:5:40;
 ax.YAxis.MinorTickValues = 5:10:25;
 set(gca,'TickLength',[0.02 0.05]);
 
@@ -112,6 +119,10 @@ text(gca,xlab,zlab,subplot_labels(1),...
 
 subplot(1,2,2)
 hold on
+% plot the settling of the center of mass of the particles 
+%cd([base,gamm,'/1prt'])
+%[time, y_p, v_p] = settling(0);
+%p0 = plot(time, v_p,'k-');
 
 for mm = 1:length(cases2)
     cd([base,gamm,'/',cases2{mm}])
@@ -125,16 +136,9 @@ for mm = 1:length(cases2)
     %vol = entr.volume * 6/pi * (1-gam) * (1-1/rho_s);
     vol = entr.volume * 6/pi;
     p(mm) = plot(time, vol, 'Color', cols(mm,:));
-
-    % plot time when trailing particle is 15 D_p below interface
-    [t,yp] = settling(0);
-    yi = par.pyc_location;
-    ind15 = nearest_index(yp,yi-15);
-    tind = nearest_index(time,t(ind15));
-    plot(time(tind),vol(tind),'o','Color',cols(mm,:),'MarkerFaceColor',cols(mm,:),'MarkerSize',3)
 end
 
-xlim([0 30])
+xlim([0 40])
 ylim([0 30])
 yticklabels([])
 yticks(0:10:30)
@@ -160,5 +164,5 @@ check_make_dir('../../figures')
 cd('../../figures')
 fname = sprintf('part_entrain_gamma_%s_theta_%s',angle_dist,strrep(gamm,'.',''));
 print_figure(fname,'format','pdf','size',[7 3])
-cd('..')
+%cd('..')
 

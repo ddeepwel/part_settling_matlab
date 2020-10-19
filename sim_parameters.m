@@ -10,6 +10,7 @@ Sc    = 700;   % m^2/s
 
 % density of particle
 rho_p = rho_1 * (1 + 18 * nu^2 * Re / g / Dp^3);
+rho_2 = rho_p - gamm * (rho_p-rho_1);
 
 % non-dim gravity
 gtilde = 18 * rho_1 / (rho_p - rho_1) / Re;

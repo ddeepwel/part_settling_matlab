@@ -29,9 +29,9 @@ end
 
 %subplot(2,1,1)
 hold on
-plot(time(inds), ang(inds)-1) % assuming D_p = 1
+plot(time(inds), abs(ang(inds))) % assuming D_p = 1
 if hit_bottom
-    plot(time(ti),ang(ti)-1,'kx')
+    plot(time(ti),abs(ang(ti)),'kx')
 end
 
 xlabel('$t/\tau$')

@@ -11,6 +11,7 @@ gamms = {...
     };
 gamm = [0.9 0.7 0.5 0.3 0.1];
 
+s0 = 2;
 thetas = {...
     's2_th0',...
     's2_th22.5',...
@@ -20,17 +21,18 @@ thetas = {...
     };
 theta = [0 22.5 45 67.5 90];
 
-suffix = {{'_entr','_entr','_entr','_entr','_entr'},...
-        {'_entr','','','',''},...
-        {'_entr','','','','_tall'},...
-        {'','','','',''},... % will use dx25 cases when done
-        {'_entr','','','',''},... % maybe use higher res cases?
+suffix = {{'_dx30','_dx25','_dx25','_dx25','_dx25'},...
+        {'_dx25','_dx25','_dx25','_dx25','_dx25'},...
+        {'_dx25','_dx25','_dx25','_dx25','_dx25'},...
+        {'_dx25','_dx25','_dx25','_dx25','_dx25'},... % s2_th90_dx40 is not complete and will take too long
+        {'_dx25','_dx25','_dx25','',''},...
         };
 
 Ngamms = length(gamms);
 Ntheta = length(theta);
 
 style = 'entrain_mass_dist';
+%style = 'sep';
 dist = 15; % only for entrain_mass_dist
 
 switch style
@@ -101,7 +103,6 @@ for mm = 1:Ngamms
 end
 
 cd('../../compare_data')
-s0 = 2;
 switch style
     case 'sep'
         fname = 'min_sep_s2';

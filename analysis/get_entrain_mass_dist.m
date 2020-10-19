@@ -18,8 +18,8 @@ end
 [t_p1, y_p1, v_p1] = settling(0);
 t_p_ind = nearest_index(y_p1, z0-dist);
 t_m_ind = nearest_index(time, t_p1(t_p_ind));
-
 t_actual = time(t_m_ind);
+
 t_actual_p_ind = nearest_index(t_p1, t_actual);
 y_actual = y_p1(t_actual_p_ind);
 
@@ -33,5 +33,7 @@ if z0 - y_actual < dist - 1
    end
 end 
 
-entrain = mass(t_m_ind);
+% use interp to find the entrainment
+%entrain = mass(t_m_ind);
+entrain = interp1(time, mass, t_p1(t_p_ind),'spline');
 entrain_dist = z0 - y_actual;

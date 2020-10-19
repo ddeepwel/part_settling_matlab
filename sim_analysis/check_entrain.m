@@ -2,15 +2,15 @@
 
 par = read_params();
 
-time = 24;
+%time = 24;
 rho_c = 0.5;
-y_c = (par.ymax + par.ymin)/2;
+y_c = par.pyc_location;
 
 ii = 24/6;
 
 
-rho = h5read('Data_4.h5','/Conc/0');
-vf = h5read('Data_4.h5','/vfc');
+rho = h5read('Data_1.h5','/Conc/0');
+vf = h5read('Data_1.h5','/vfc');
 gd = read_grid();
 
 [Nx, Ny, Nz] = size(rho);

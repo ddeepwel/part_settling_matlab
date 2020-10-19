@@ -1,5 +1,6 @@
 % compare the particle settling for different stratifications (gamma)
 % and particle orientation angle (theta)
+% plot as a function of distance not time
 
 clear all
 
@@ -76,7 +77,9 @@ for mm = 1:length(cases1)
     else
         inds = 1:length(t_p0);
     end
-    p1(mm) = plot(t_p0(inds), -(v_p0(inds)+v_p1(inds))/2, 'Color', cols(mm,:));
+    v1 = interp1(y_p1,v_p1,y_p0);
+    %p1(mm) = plot((y_p0(inds)+y_p1(inds))/2, -(v_p0(inds)+v_p1(inds))/2, 'Color', cols(mm,:));
+    p1(mm) = plot(y_p0, -(v_p0+v1)/2, 'Color', cols(mm,:));
 
     % plot the settling of just a single particle in a dashed line
     cd([base,cases1{mm},'/1prt',suffix_1prt{mm}])
@@ -89,7 +92,7 @@ for mm = 1:length(cases1)
     else
         inds = 1:length(time);
     end
-    plot(time(inds), -v_p(inds),'--', 'Color', cols(mm,:))
+    plot(y_p(inds), -v_p(inds),'--', 'Color', cols(mm,:))
 
     % plot the stokes settling speed in the lower layer
     par = read_params();
@@ -99,13 +102,13 @@ for mm = 1:length(cases1)
     if time(inds(end))+4 > 80
         plot([70 75], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
     else
-        plot([time(inds(end))-5 time(inds(end))], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
+        plot([y_p(inds(end))-5 time(inds(end))], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
     end
 end
 
-xlim([0 80])
+%xlim([0 80])
 ylim([0 1.2])
-xlabel('$t/\tau$')
+xlabel('$z/D_p$')
 ylabel('$w_c/w_s$')
 
 leg = legend(p1, labs1);
@@ -180,6 +183,6 @@ shift_axis(-0.02,0)
 check_make_dir('../../figures')
 cd('../../figures')
 fname = sprintf('part_settling_gamma_%s_theta_%s',angle_dist,strrep(gamm,'.',''));
-%print_figure(fname,'format','pdf','size',[10 3])
+print_figure(fname,'format','pdf','size',[10 3])
 %cd('..')
 

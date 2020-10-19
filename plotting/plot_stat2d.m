@@ -1,14 +1,21 @@
 function [data, vf, xvar, yvar, xy_p] = plot_stat2d(group, field, t_index, varargin);
 % Plot a 2D statistic
 
-if nargin == 6
+if nargin == 7
     fnum  = varargin{1};
     clim  = varargin{2};
     style = varargin{3};
+    doplot = varargin{4};
+elseif nargin == 6
+    fnum  = varargin{1};
+    clim  = varargin{2};
+    style = varargin{3};
+    doplot = true;
 elseif nargin == 5
     fnum  = varargin{1};
     clim  = varargin{2};
     style = 'pcolor';
+    doplot = true;
 elseif nargin ==4;
     fnum = varargin{1};
     if strcmp(field, 'c0') || strcmp(field, 'c1')
@@ -17,6 +24,7 @@ elseif nargin ==4;
         clim = 'auto';
     end
     style = 'pcolor';
+    doplot = true;
 else
     fnum = 95;
     style = 'pcolor';
@@ -25,6 +33,7 @@ else
     else
         clim = 'auto';
     end
+    doplot = true;
 end
 
 % load grid
@@ -104,63 +113,68 @@ for ii = t_index
     time = h5read(filename_2d, '/time');
 
     % make figure
-    figure(fnum)
-    clf
-    hold on
-    switch style
-        case 'pcolor'
-            pcolor(xvar, yvar, data'.*(1-vf'))
-        case 'contourf'
-            contourf(xvar, yvar, data'.*(1-vf'),51)
-        case 'contour'
-            contour(xvar, yvar, data'.*(1-vf'),10)
-    end
-    shading flat
-    %contour(xvar, yvar, data'.*(1-vf'), [1 1]*0.5)
-    %contour(xvar, yvar, data'.*(1-vf'), 20)
-
-    % add particle positions
-    if ~strcmp(group, 'integral_y')
-        if strncmp(group(1:2), 'xy',2)
-            particle_files = dir('mobile_*.dat');
-            N_files = length(particle_files);
-            p = cell(1, N_files);
-            for mm = 1:N_files
-                fname = sprintf('mobile_%d', mm-1);
-                p{mm} = check_read_dat(fname);
-                x = p{mm}.x;
-                y = p{mm}.y;
-                ind = nearest_index(p{1}.time, time);
-                xy_p(mm,:) = [x(ind) y(ind)];
-                viscircles(xy_p(mm,:), 0.5, 'Color', [0 0 0], 'LineWidth', 1);
-            end
-        else
-            % contours do not seem to work very well
-            %warning('off','MATLAB:contour:ConstantData')
-            %contour(xvar, yvar, (1-vf'),[1 1])
-            %warning('on','MATLAB:contour:ConstantData')
+    if doplot
+        figure(fnum)
+        clf
+        hold on
+        switch style
+            case 'pcolor'
+                pcolor(xvar, yvar, data'.*(1-vf'))
+            case 'contourf'
+                contourf(xvar, yvar, data'.*(1-vf'),51)
+            case 'contour'
+                contour(xvar, yvar, data'.*(1-vf'),10)
         end
-    end
+        shading flat
+        %contour(xvar, yvar, data'.*(1-vf'), [1 1]*0.5)
+        %contour(xvar, yvar, data'.*(1-vf'), 20)
 
-    colorbar
-    xlabel(xlab)
-    ylabel(ylab)
-    if ischar(clim)
-        caxis([-1 1]*max(abs(data(:))));
-    else
-        caxis(clim)
-    end
-    colormap(cmap)
+        % add particle positions
+        if ~strcmp(group, 'integral_y')
+            if strncmp(group(1:2), 'xy',2)
+                particle_files = dir('mobile_*.dat');
+                N_files = length(particle_files);
+                p = cell(1, N_files);
+                for mm = 1:N_files
+                    fname = sprintf('mobile_%d', mm-1);
+                    p{mm} = check_read_dat(fname);
+                    x = p{mm}.x;
+                    y = p{mm}.y;
+                    ind = nearest_index(p{1}.time, time);
+                    xy_p(mm,:) = [x(ind) y(ind)];
+                    viscircles(xy_p(mm,:), 0.5, 'Color', [0 0 0], 'LineWidth', 1);
+                end
+            else
+                % contours do not seem to work very well
+                %warning('off','MATLAB:contour:ConstantData')
+                %contour(xvar, yvar, (1-vf'),[1 1])
+                %warning('on','MATLAB:contour:ConstantData')
+            end
+        end
 
-    %title(sprintf('$%s$, $t_n$ = %d, $t$ = %2.2g',strrep(field, '_', ' '), ii,time))
-    if strcmp(field, 'c_curve_diag')
-        field = '\textrm{c curvature}';
-    end
-    if par.output_time_interval_2d < 1
-        ttl = sprintf('$%s$, $t/\\tau$ = %4.2f, %s',field, time, seclab);
+        colorbar
+        xlabel(xlab)
+        ylabel(ylab)
+        if ischar(clim)
+            caxis([-1 1]*max(abs(data(:))));
+        else
+            caxis(clim)
+        end
+        colormap(cmap)
+
+        %title(sprintf('$%s$, $t_n$ = %d, $t$ = %2.2g',strrep(field, '_', ' '), ii,time))
+        if strcmp(field, 'c_curve_diag')
+            field = '\textrm{c curvature}';
+        end
+        if par.output_time_interval_2d < 1
+            ttl = sprintf('$%s$, $t/\\tau$ = %4.2f, %s',field, time, seclab);
+        else
+            ttl = sprintf('$%s$, $t/\\tau$ = %2.2f, %s',field, time, seclab);
+        end
+        title(ttl, 'Interpreter','Latex');
+        figure_defaults()
     else
-        ttl = sprintf('$%s$, $t/\\tau$ = %2.2f, %s',field, time, seclab);
+        xy_p = [0 0];
+        % this is incorrect, but I don't want to program it in right now
     end
-    title(ttl, 'Interpreter','Latex');
-    figure_defaults()
 end

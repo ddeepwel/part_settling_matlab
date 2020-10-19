@@ -7,7 +7,14 @@ if nargin == 0
     multi_plot = false;
 end
 
-load('entrained_mass')
+try
+    load('entrained_tracer')
+    mass = volume * 6/pi;% * (1-gam) * (1-1/rho_s);
+catch
+    load('entrained_mass')
+    mass = M_entrain * 6/pi;% * (1-gam) * (1-1/rho_s);
+end
+
 par = read_params();
 Ri = par.richardson;
 Re = par.Re;
@@ -21,9 +28,10 @@ if ~multi_plot
 end
 hold on
 
-plot(time, M_entrain * 6/pi * (1-gam) * (1-1/rho_s),'x')
+%plot(time, M_entrain * 6/pi * (1-gam) * (1-1/rho_s),'x')
+plot(time, mass);
 
-ylabel('$M_\textrm{entrain} / M_p$','Interpreter','latex')
+ylabel('entrained fluid (unitless)','Interpreter','latex')
 xlabel('$t/\tau$')
 %xlim([0 50])
 
@@ -32,6 +40,6 @@ figure_defaults();
 if save_plot
     check_make_dir('figures')
     cd('figures')
-    print_figure('entrain_mass','format','pdf','size',[6 4])
+    %print_figure('entrain_mass','format','pdf','size',[6 4])
     cd('..')
 end

@@ -8,7 +8,7 @@ N_files = length(particle_files);
 % height above bottom
 % when particle 'feels' the bottom
 if nargin == 0
-    H = 3;
+    H = 4;
 end
 
 height = zeros(1,N_files);

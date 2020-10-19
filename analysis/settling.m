@@ -6,8 +6,13 @@ if nargin == 0
 end
 
 % Read data
-file_name = sprintf('mobile_%d',particle_ID);
-particle_data = check_read_dat(file_name);
+try
+    file_name = sprintf('mobile_%d',particle_ID);
+    particle_data = check_read_dat(file_name);
+catch
+    file_name = sprintf('mobile');
+    particle_data = check_read_dat(file_name);
+end
 
 % get data
 time = particle_data.time;
