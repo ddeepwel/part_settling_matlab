@@ -213,6 +213,8 @@ axis([90 180 0 8])
 if strcmp(style,'entrain_mass_dist')
     phi = pi/2 - acos(0.5/8);
     polarplot(pi/2 + [pi/2 phi],[0.5 8],'k')
+    % use 0.5 as the separation distance because it is the distance from the particle edge
+    % not the particle centre
 end
 
 ax = gca;
