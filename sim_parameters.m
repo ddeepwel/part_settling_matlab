@@ -51,5 +51,5 @@ fprintf('Ri      = %0.5g\n', Ri);
 fprintf('pyc_loc = %0.5g\n', pyc_location);
 fprintf('y_slices= %0.5g, %0.5g, %0.5g\n',s1,s2,s3);
 fprintf('particle positions:\n');
-fprintf('  P1:    %6.5g %6.5g\n', x1, y1);
-fprintf('  P2:    %6.5g %6.5g\n', x2, y2);
+fprintf('  P1:    %6.6g %6.6g\n', x1, y1);
+fprintf('  P2:    %6.6g %6.6g\n', x2, y2);
