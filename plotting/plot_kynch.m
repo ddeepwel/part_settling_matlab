@@ -19,14 +19,14 @@ figure(44)
 clf
 subplot(1,2,1)
 hold on
-plot(theta, u_v1)
-plot(theta, u_v2)
-plot(theta, u_v3)
+p1 = plot(theta, u_v1);
+p2 = plot(theta, u_v2);
+p3 = plot(theta, u_v3);
 xlim([0 90])
 ylim([1 1.5])
 xlabel('$\theta$ ($^\circ$)')
 ylabel('$u_v/w_s$')
-leg = legend({'$\tilde{s} = 1/4,~(s/D_p=1)$','$\tilde{s} = 1/8,~ (s/D_p=3)$','$\tilde{s} = 1/16,~(s/D_p=7)$'},'Interpreter','Latex');
+leg = legend([p1 p2 p3], {'$\tilde{s} = 1/4,~(s/D_p=1)$','$\tilde{s} = 1/8,~ (s/D_p=3)$','$\tilde{s} = 1/16,~(s/D_p=7)$'},'Interpreter','Latex');
 leg.Box = 'off';
 leg.Location = 'North';
 pos = leg.Position;

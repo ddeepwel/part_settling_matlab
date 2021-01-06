@@ -3,9 +3,14 @@
 
 clear('p')
 
+figure(161)
+clf
+
+cols = default_line_colours();
+
 %base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
 base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
-angle_dist = 's2_th67.5';
+angle_dist = {'s2_th22.5','s2_th45','s2_th67.5'};
 cases = {...
     'gamm1.0',...
     'gamm0.9',...
@@ -23,7 +28,10 @@ labs = {...
     '$\Gamma = 0.7$',...
     %'$\Gamma = 0.9$',...
     };
-switch angle_dist
+for nn = 1:3
+    ax = subplot(1,3,nn);
+    hold on
+switch angle_dist{nn}
     case 's2_th22.5'
         suffix = {... % th22.5
             '_dx25',...
@@ -34,6 +42,7 @@ switch angle_dist
             %'',... % ???
             };
         ang = 22.5;
+        xlab = -0.21;
     case 's2_th45'
         suffix = {... % th45
             '_dx25',...
@@ -44,19 +53,21 @@ switch angle_dist
             %'_dx25',...
             };
         ang = 45;
+        xlab = -0.12;
     case 's2_th67.5'
         suffix = {... % th22.5
-            ...%'',... has not been run
             '_dx25',...
             '_dx25',...
             '_dx25',...
             '_dx25',...
             '_dx25',...
+            %'_dx25',...
             };
         ang = 67.5;
+        xlab = -0.12;
 end
 
-direc = [base,cases{1},'/',angle_dist,suffix{1}];
+direc = [base,cases{1},'/',angle_dist{nn},suffix{1}];
 cd(direc)
 par = read_params();
 g = 9.81;
@@ -71,13 +82,9 @@ w2_w1 = gams./(rho_s-gams*(rho_s-1));
 mfactor = kynch_factor(1/2); % input argument = 1/s
 uh_w2 = mfactor * sind(90-ang) * sind(90-ang);
 
-figure(161)
-clf
-
-cols = default_line_colours();
 
 for mm = 1:length(cases)
-    direc = [base,cases{mm},'/',angle_dist,suffix{mm}];
+    direc = [base,cases{mm},'/',angle_dist{nn},suffix{mm}];
     disp(direc)
     cd(direc)
     [time, th] = particle_angle();
@@ -90,7 +97,6 @@ for mm = 1:length(cases)
         inds = 1:length(time);
     end
 
-    %subplot(1,2,1)
     hold on
     if strcmp(cases{mm}, 'gamm1.0')
         p1(mm) = plot(time(inds), abs(th(inds)), 'k');
@@ -99,18 +105,24 @@ for mm = 1:length(cases)
     end
     xlim([0 80])
     ylim([0 90])
-    %yticks(0:3)
-    %yticklabels([0 {''} 2 {''} 4])
+    yticks([0 22.5 45 67.5 90])
     set(gca,'TickLength',[0.02 0.05]);
     if mm == length(mm)
         xlabel('$t/\tau$')
-        ylabel('$\theta$ ($^\circ$)')
-        set(gca,'XMinorTick','on','YMinorTick','on')
-        ax = gca;
+        set(ax,'XMinorTick','on','YMinorTick','on')
         ax.XAxis.MinorTickValues = 10:20:70;
-        ax.YAxis.MinorTickValues = 10:20:90;
+        ax.YAxis.MinorTickValues = 11.25:22.5:90;
         text(gca,6,0,'*','VerticalAlignment','top');
+        shift_axis(-0.03*(nn-2),0.04)
+        text(gca,xlab,0.9,subplot_labels(nn),...
+            'Color','k','Units','normalized','Interpreter','Latex')
     end
+    if nn == 1
+        ylabel('$\theta$ ($^\circ$)')
+    else
+        yticklabels([])
+    end
+end
 end
 
 leg = legend(p1(end:-1:1), {labs{end:-1:1}});
@@ -129,7 +141,7 @@ figure_defaults
 
 check_make_dir('../../figures')
 cd('../../figures')
-fname = sprintf('part_angle_%s',strrep(angle_dist,'.',''));
-print_figure(fname,'format','pdf','size',[4 3])
+fname = sprintf('part_angle_all');
+print_figure(fname,'format','pdf','size',[10 3])
 %cd('..')
 

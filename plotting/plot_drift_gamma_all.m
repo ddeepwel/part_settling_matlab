@@ -3,9 +3,14 @@
 
 clear('p')
 
+figure(161)
+clf
+
+cols = default_line_colours();
+
 %base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
 base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
-angle_dist = 's2_th67.5';
+angle_dist = {'s2_th22.5','s2_th45','s2_th67.5'};
 cases = {...
     'gamm1.0',...
     'gamm0.9',...
@@ -23,7 +28,10 @@ labs = {...
     '$\Gamma = 0.7$',...
     %'$\Gamma = 0.9$',...
     };
-switch angle_dist
+for nn = 1:3
+    ax = subplot(1,3,nn);
+    hold on
+switch angle_dist{nn}
     case 's2_th22.5'
         suffix = {... % th22.5
             '_dx25',...
@@ -34,6 +42,7 @@ switch angle_dist
             %'',... % ???
             };
         ang = 22.5;
+        xlab = -0.21;
     case 's2_th45'
         suffix = {... % th45
             '_dx25',...
@@ -44,19 +53,21 @@ switch angle_dist
             %'_dx25',...
             };
         ang = 45;
+        xlab = -0.12;
     case 's2_th67.5'
         suffix = {... % th22.5
-            ...%'',... has not been run
             '_dx25',...
             '_dx25',...
             '_dx25',...
             '_dx25',...
             '_dx25',...
+            %'_dx25',...
             };
         ang = 67.5;
+        xlab = -0.12;
 end
 
-direc = [base,cases{1},'/',angle_dist,suffix{1}];
+direc = [base,cases{1},'/',angle_dist{nn},suffix{1}];
 cd(direc)
 par = read_params();
 g = 9.81;
@@ -71,16 +82,13 @@ w2_w1 = gams./(rho_s-gams*(rho_s-1));
 mfactor = kynch_factor(1/2); % input argument = 1/s
 uh_w2 = mfactor * sind(90-ang) * cosd(90-ang);
 
-figure(161)
-clf
-
-cols = default_line_colours();
-
 for mm = 1:length(cases)
-    direc = [base,cases{mm},'/',angle_dist,suffix{mm}];
+    % go to directory
+    direc = [base,cases{mm},'/',angle_dist{nn},suffix{mm}];
     disp(direc)
     cd(direc)
-    [time, th] = particle_angle();
+    % load data
+    [time, ~, u_drift] = particle_drift();
     % check if reached bottom and don't plot after this
     hit_bottom = reached_bottom();
     if hit_bottom
@@ -90,54 +98,81 @@ for mm = 1:length(cases)
         inds = 1:length(time);
     end
 
-    [time, ~, u_drift] = particle_drift();
+    % plot data
     hold on
     if strcmp(cases{mm}, 'gamm1.0')
+        % homogeneous fluid
         %p2(mm) = plot(time(inds), u_drift(inds) / w2_w1(mm) / uh_w2, 'k'); % scaled by lower layer settling speed
         p2(mm) = plot(time(inds), u_drift(inds)             / uh_w2, 'k');  % scaled by upper layer settling speed
-        plot([16 20], [1 1]*w2_w1(mm),'k','linewidth',2)
+        % predicted drift
+        %plot([16 20], [1 1]*w2_w1(mm),'k','linewidth',2)
     else
+        % stratified fluid
         %p2(mm) = plot(time(inds), u_drift(inds) / w2_w1(mm) / uh_w2, 'Color', cols(mm-1,:)); % scaled by lower layer settling speed
         p2(mm) = plot(time(inds), u_drift(inds)             / uh_w2, 'Color', cols(mm-1,:));  % scaled by upper layer settling speed
+        % predicted drift
+        %if mm == 5
+        %    plot([70 74], [1 1]*w2_w1(mm),'Color',cols(mm-1,:),'linewidth',2)
+        %else
+        %    plot(time(inds(end))+ [-4 0], [1 1]*w2_w1(mm),'Color',cols(mm-1,:),'linewidth',2)
+        %end
+    end
+
+    % plot the observed drift from multiple simulations
+    if mm ~= 1
+        cd([pwd,'_homo'])
+    else
+        tind = nearest_index(time, 2);
+        u_drift_upper = u_drift(tind); % upper layer drift speed at Re=1/4
+        u_drift_upper = uh_w2; % this is actually the drift per settling rate in any layer
+    end
+    [time_homo, ~, u_drift_homo] = particle_drift();
+    tind = nearest_index(time_homo, 2);
+    u_drift_lower = u_drift_homo(tind);
+    if strcmp(cases{mm}, 'gamm1.0')
+        plot([16 20], [1 1]*u_drift_lower/u_drift_upper(mm),'k:','linewidth',2)
+    else
         if mm == 5
-            plot([70 74], [1 1]*w2_w1(mm),'Color',cols(mm-1,:),'linewidth',2)
+            plot([70 74], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
         else
-            plot(time(inds(end))+ [-4 0], [1 1]*w2_w1(mm),'Color',cols(mm-1,:),'linewidth',2)
+            plot(time(inds(end))+ [-4 0], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
         end
     end
+
+
+
+    % make pretty
     xlim([0 80])
     ylim([0 1.25])
-    yticks(0:2)
-    %yticklabels([0 {''} 2 {''} 4])
+    yticks(0:0.5:2)
     set(gca,'TickLength',[0.02 0.05]);
     if mm == length(mm)
         xlabel('$t/\tau$')
-        ylabel('$u_\textrm{drift}/u_h$','Interpreter','latex')
-        set(gca,'XMinorTick','on','YMinorTick','on')
-        ax = gca;
+        set(ax,'XMinorTick','on','YMinorTick','on')
         ax.XAxis.MinorTickValues = 10:20:70;
         ax.YAxis.MinorTickValues = 0:0.25:2;
         text(gca,6,0,'*','VerticalAlignment','top');
+        shift_axis(-0.03*(nn-2),0.04)
+        text(gca,xlab,0.9,subplot_labels(nn),...
+            'Color','k','Units','normalized','Interpreter','Latex')
     end
+    if nn == 1
+        ylabel('$u_\textrm{drift}/u_h$','Interpreter','latex')
+    else
+        yticklabels([])
+    end
+end
 end
 
 leg = legend(p2, labs);
 leg.Location = 'NorthEast';
 leg.Box = 'off';
-%leg.NumColumns = 2;
-%ax = gca;
-%pos = ax.Position;
-%pos(3) = xlen;
-%pos(4) = zlen;
-%pos(1) = 0.5- xlen/2;
-%ax.Position = pos;
-%shift_axis(0,+zshift)
 
 figure_defaults
 
 check_make_dir('../../figures')
 cd('../../figures')
-fname = sprintf('part_drift_%s',strrep(angle_dist,'.',''));
-print_figure(fname,'format','pdf','size',[4 3])
+fname = sprintf('part_drift_all');
+print_figure(fname,'format','pdf','size',[10 3])
 %cd('..')
 

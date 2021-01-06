@@ -111,7 +111,7 @@ for mm = 1:length(cases_Re)
 
     if mm == 3
         xlim([0 3])
-        xlabel('$(r - D_p/2)/D_p$')
+        xlabel('$r/D_p - 1/2$')
         ylabel('$(w - w_p)/w_s$','Interpreter','Latex')
         ax = gca;
         set(ax,'XMinorTick','on','YMinorTick','on')

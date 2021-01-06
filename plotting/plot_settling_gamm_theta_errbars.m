@@ -2,9 +2,9 @@
 % and particle orientation angle (theta)
 
 clear all
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
 
-% stratifications for 1st subplot
+%base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
+base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
 angle_dist = 's2_th0';
 cases1 = {...
     'gamm1.0',...
@@ -29,7 +29,7 @@ suffix = {...
     '_dx25',...
     '_dx25',...
     '_dx25',...
-    %'_entr',... % the _resdbl case also has problems (the particles reverses settling due to numerical issue)
+    %'_entr',... % the _resdbl case has problems (the particles reverses settling due to numerical issue)
     };
 suffix_1prt = {...
     '_dx25',...
@@ -40,7 +40,6 @@ suffix_1prt = {...
     %'',...
     };
 
-% angles for 2nd subplot
 gamm = 'gamm0.9';
 cases2 = {...
     's2_th0_dx30',...
@@ -57,20 +56,18 @@ labs2 = {...
     '$\theta = 90^\circ$',...
     };
 
-% setup figure
 figure(165)
 clf
+
 cols = default_line_colours();
 cols = [0 0 0; cols];
+
 subplot(1,2,1)
 hold on
-
-% 1st subplot
 for mm = 1:length(cases1)
     cd([base,cases1{mm},'/',angle_dist,suffix{mm}])
     [t_p0, y_p0, v_p0] = settling(0);
     [t_p1, y_p1, v_p1] = settling(1);
-    vp_com = (v_p0 + v_p1)/2;
     % check if reached bottom and don't plot after this
     hit_bottom = reached_bottom();
     if hit_bottom
@@ -79,7 +76,17 @@ for mm = 1:length(cases1)
     else
         inds = 1:length(t_p0);
     end
-    p1(mm) = plot(t_p0(inds), -vp_com(inds), 'Color', cols(mm,:));
+    if mm == 1
+        inds = inds(1:end-2000);
+    end
+    vel = -(v_p0+v_p1)/2;
+    p1(mm) = plot(t_p0(inds), vel(inds), 'Color', cols(mm,:));
+
+    % add error bars
+    err = 0.2;
+    ff = fill([t_p0(1:5:inds(end)); flip(t_p0(1:5:inds(end)))],[vel(1:5:inds(end))*(1+err); flip(vel(1:5:inds(end)))*(1-err)],cols(mm,:));
+    ff.FaceAlpha = 0.3;
+    ff.LineStyle = 'none';
 
     % plot the settling of just a single particle in a dashed line
     cd([base,cases1{mm},'/1prt',suffix_1prt{mm}])
@@ -92,46 +99,22 @@ for mm = 1:length(cases1)
     else
         inds = 1:length(time);
     end
-    plot(time(inds), -v_p(inds),'--', 'Color', cols(mm,:))
+    %plot(time(inds), -v_p(inds),'--', 'Color', cols(mm,:))
 
     % plot the stokes settling speed in the lower layer
-    %par = read_params();
-    %rho_s = par.rho_s;
-    %rho_2 = rho_s - gm(mm) * (rho_s - 1);
-    %ws2_ws1 = (rho_s/rho_2 - 1) / (rho_s - 1);
-    %if time(inds(end))+4 > 80
-    %    plot([70 75], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
-    %else
-    %    plot([time(inds(end))-5 time(inds(end))], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
-    %end
-    
-    % plot the observed settling speed in the lower layer
-    if mm ~= 1
-        cd('../1prt_dx25_homo')
-    else
-        tind = nearest_index(time, 1);
-        u_settle_lower = vp_com(tind);
-    end
-    [time_homo, y_p0_homo, v_p_homo] = settling(0);
-    %[time_homo, y_p1_homo, v_p1_homo] = settling(1);
-    %v_p_homo = (v_p0_homo + v_p1_homo)/2;
-    tind = nearest_index(time_homo, 5);
-    v_settle_lower = v_p_homo(tind);
+    par = read_params();
+    rho_s = par.rho_s;
+    rho_2 = rho_s - gm(mm) * (rho_s - 1);
+    ws2_ws1 = (rho_s/rho_2 - 1) / (rho_s - 1);
     if time(inds(end))+4 > 80
-        plot([70 75], [1 1]*(-v_settle_lower),':','Color',cols(mm,:),'LineWidth',2);
+        plot([70 75], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
     else
-        plot([time(inds(end))-5 time(inds(end))], [1 1]*(-v_settle_lower),':','Color',cols(mm,:),'LineWidth',2);
-    end
-
-    % add the recovery time
-    if mm > 1
-        trec = [16 24 38 71];
-        plot([1 1]*(6+trec(mm-1)), [0.02 0.06],'Color',cols(mm,:),'LineWidth',2)
+        plot([time(inds(end))-5 time(inds(end))], [1 1]*ws2_ws1,'-','Color',cols(mm,:),'LineWidth',2);
     end
 end
 
 xlim([0 80])
-ylim([0 1.2])
+ylim([0 1.4])
 xlabel('$t/\tau$')
 ylabel('$w_c/w_s$')
 
@@ -141,7 +124,7 @@ leg.Location = 'NorthEast';
 %pos(2) = pos(2) + 0.0005;
 %leg.Position = pos;
 leg.Box = 'off';
-yticks(0:0.4:1.2)
+yticks(0:0.4:1.6)
 set(gca,'XMinorTick','on','YMinorTick','on')
 ax = gca;
 ax.XAxis.MinorTickValues = 10:20:70;
@@ -153,8 +136,6 @@ zlab = 0.9;
 text(gca,xlab,zlab,subplot_labels(1),...
             'Color','k','Units','normalized','Interpreter','Latex')
 
-
-% 2nd subplot
 cols = default_line_colours();
 subplot(1,2,2)
 hold on
@@ -175,7 +156,7 @@ for mm = 1:length(cases2)
 end
 
 xlim([0 25])
-ylim([0 1.2])
+ylim([0 1.4])
 yticklabels([])
 xlabel('$t/\tau$')
 %ylabel('$w_p/w_s$')
@@ -198,16 +179,16 @@ subplot(1,2,1)
 %pos = get(gca,'position');
 %pos(4) = pos(4) * 0.9;
 %set(gca,'position',pos);
-shift_axis(0.02,0)
+shift_axis(0.02,0.05)
 subplot(1,2,2)
 %pos = get(gca,'position');
 %pos(4) = pos(4) * 0.9;
 %set(gca,'position',pos);
-shift_axis(-0.02,0)
+shift_axis(-0.02,0.05)
 
 check_make_dir('../../figures')
 cd('../../figures')
-fname = sprintf('part_settling_gamma_%s_theta_%s',angle_dist,strrep(gamm,'.',''));
+fname = sprintf('part_settling_gamma_%s_theta_%s_new',angle_dist,strrep(gamm,'.',''));
 print_figure(fname,'format','pdf','size',[10 3])
-%cd('..')
+cd('..')
 
