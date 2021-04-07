@@ -24,7 +24,7 @@ p2 = plot(theta, u_v2);
 p3 = plot(theta, u_v3);
 xlim([0 90])
 ylim([1 1.5])
-xlabel('$\theta$ ($^\circ$)')
+xlabel('$\theta$ (deg)')
 ylabel('$u_v/w_s$')
 leg = legend([p1 p2 p3], {'$\tilde{s} = 1/4,~(s/D_p=1)$','$\tilde{s} = 1/8,~ (s/D_p=3)$','$\tilde{s} = 1/16,~(s/D_p=7)$'},'Interpreter','Latex');
 leg.Box = 'off';
@@ -49,7 +49,7 @@ plot(theta, u_h1)
 plot(theta, u_h2)
 plot(theta, u_h3)
 xlim([0 90])
-xlabel('$\theta$ ($^\circ$)')
+xlabel('$\theta$ (deg)')
 ylabel('$u_h/w_s$')
 ax = gca;
 set(gca,'XMinorTick','on','YMinorTick','on')
@@ -63,5 +63,5 @@ text(gca,xlab,zlab,subplot_labels(2),...
         'Color','k','Units','normalized','Interpreter','Latex')
 
 figure_defaults();
-cd('/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/figures')
-print_figure('kynch','format','pdf','size',[7 3])
+%cd('/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/figures')
+%print_figure('kynch','format','pdf','size',[7 3])

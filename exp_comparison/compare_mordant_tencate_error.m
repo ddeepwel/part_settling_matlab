@@ -1,8 +1,7 @@
 % compare the settling from Parties and Camassa 2010
 
 
-%base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/mordant/';
-base = '/home/ddeepwel/scratch/bsuther/part_settling/comparisons_and_checks/';
+base = '/Volumes/2part_settling/comparisons_and_checks/';
 
 sim_cases = {'mordant/midres','tencate/try1'};
 
@@ -86,5 +85,5 @@ figure_defaults()
 
 check_make_dir('../figures')
 orig_dir = cd('../figures');
-print_figure('mordant_tencate_error','format','pdf','size',[7.5 4])
+%print_figure('mordant_tencate_error','format','pdf','size',[7.5 4])
 cd(orig_dir)

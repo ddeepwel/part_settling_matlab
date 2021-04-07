@@ -8,8 +8,7 @@ clf
 
 cols = default_line_colours();
 
-%base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 angle_dist = {'s2_th22.5','s2_th45','s2_th67.5'};
 cases = {...
     'gamm1.0',...
@@ -118,7 +117,7 @@ for mm = 1:length(cases)
             'Color','k','Units','normalized','Interpreter','Latex')
     end
     if nn == 1
-        ylabel('$\theta$ ($^\circ$)')
+        ylabel('$\theta$ (deg)')
     else
         yticklabels([])
     end

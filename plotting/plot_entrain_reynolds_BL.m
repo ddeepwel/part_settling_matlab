@@ -1,10 +1,10 @@
 % compare the entrainment for different Reynolds number
 
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/';
+base = '/Volumes/2part_settling/2particles/sigma1/';
 angle_dist = 'gamm0.9/s2_th90';
 cases = {...
     ...%'Re1',...
-    'Re0.25',...
+    'Re1_4',...
     'Re1_8',...
     'Re1_16',...
     };
@@ -64,7 +64,7 @@ hold on
 t_i = 25;
 
 base = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/';
-cases_Re = {'Re0.25','Re1_8','Re1_16'};
+cases_Re = {'Re1_4','Re1_8','Re1_16'};
 spec = {'s2_th90_Re_case','s2_th90_Pe175','s2_th90_Pe175'};
 
 for mm = 1:length(cases_Re)
@@ -126,4 +126,4 @@ end
 figure_defaults()
 
 cd('../../../figures')
-print_figure('entrain_Re_BL','format','pdf','size',[7 3])
+%print_figure('entrain_Re_BL','format','pdf','size',[7 3])

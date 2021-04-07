@@ -1,7 +1,7 @@
 % make a plot of the evolution of the settling
 clear all
 
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 cases = {'gamm0.9/s2_th0_dx30','gamm0.9/s2_th67.5_dx25','gamm0.5/s2_th67.5'};
 
 Ncases = length(cases);

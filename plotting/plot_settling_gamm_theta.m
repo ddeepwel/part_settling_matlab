@@ -2,7 +2,6 @@
 % and particle orientation angle (theta)
 
 clear all
-%base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
 base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 
 % stratifications for 1st subplot
@@ -209,6 +208,7 @@ shift_axis(-0.02,0.03)
 check_make_dir('../../figures')
 cd('../../figures')
 fname = sprintf('part_settling_gamma_%s_theta_%s',angle_dist,strrep(gamm,'.',''));
-print_figure(fname,'format','jpeg','size',[10 3]*4/3)
+% change font size to 14
+%print_figure(fname,'format','jpeg','size',[10 3]*4/3,'res',600)
 %cd('..')
 

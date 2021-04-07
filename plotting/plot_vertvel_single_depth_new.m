@@ -2,7 +2,8 @@
 % this is to show how the stratification changes the velocity structure
 
 
-base = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/Re0.25/';
+%base = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/Re0.25/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 gamm_dirs = {
 'gamm1.0',...
 'gamm0.9',...
@@ -121,7 +122,6 @@ for mm = 1:length(gs)
     figure(77)
     plot(w_z,yvar-24)
 
-    %keyboard
     %[max_vel(mm), indy] = max(w_mid);
     %Dmat = FiniteDiff(yvar,1,2);
     %w_z = Dmat*w_mid';
@@ -152,7 +152,7 @@ figure_defaults()
 
 figure(75)
 figure_defaults()
-add_dir('extras')
+%add_dir('extras')
 cmap = cmocean('-ice');
 cmap = [cmap(end:-1:1,:); cmap];
 cmap2 = make_max_white(cmap);

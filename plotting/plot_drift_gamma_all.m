@@ -8,8 +8,7 @@ clf
 
 cols = default_line_colours();
 
-%base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 angle_dist = {'s2_th22.5','s2_th45','s2_th67.5'};
 cases = {...
     'gamm1.0',...
@@ -130,12 +129,12 @@ for mm = 1:length(cases)
     tind = nearest_index(time_homo, 2);
     u_drift_lower = u_drift_homo(tind);
     if strcmp(cases{mm}, 'gamm1.0')
-        plot([16 20], [1 1]*u_drift_lower/u_drift_upper(mm),'k:','linewidth',2)
+        plot([16 22], [1 1]*u_drift_lower/u_drift_upper(mm),'k:','linewidth',2)
     else
         if mm == 5
-            plot([70 74], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
+            plot([70 76], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
         else
-            plot(time(inds(end))+ [-4 0], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
+            plot(time(inds(end))+ [-4 2], [1 1]*u_drift_lower/u_drift_upper,':','Color',cols(mm-1,:),'linewidth',2)
         end
     end
 
@@ -173,6 +172,6 @@ figure_defaults
 check_make_dir('../../figures')
 cd('../../figures')
 fname = sprintf('part_drift_all');
-print_figure(fname,'format','pdf','size',[10 3])
+%print_figure(fname,'format','pdf','size',[10 3])
 %cd('..')
 

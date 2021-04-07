@@ -3,8 +3,7 @@
 
 clear('p')
 
-%base = '/project/6001470/ddeepwel/part_settling/2particles/sigma1/Re0.25/';
-base = '/home/ddeepwel/scratch/bsuther/part_settling/2particles/sigma1/Re0.25/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/';
 angle_dist = 's2_th0';
 cases1 = {...
     ...%'gamm1.0',...

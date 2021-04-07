@@ -3,7 +3,8 @@
 plot_kynch
 
 
-base = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/Re0.25/gamm1.0/';
+%base = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/Re0.25/gamm1.0/';
+base = '/Volumes/2part_settling/2particles/sigma1/Re1_4/gamm1.0/';
 dirs = {{...
     's2_th0_dx25',...
     's2_th22.5_dx25',...
@@ -80,4 +81,4 @@ end
 leg = legend([p1 p2 p3], {'$\tilde{s} = 1/4,~(s/D_p=1)$','$\tilde{s} = 1/8,~ (s/D_p=3)$','$\tilde{s} = 1/16,~(s/D_p=7)$'},'Interpreter','Latex');
 
 cd('../figures')
-print_figure('kynch_with_inertia','format','pdf');
+print_figure('kynch_with_inertia','format','pdf','size',[8 3]);

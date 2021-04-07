@@ -1,8 +1,6 @@
 % compare the settling from Parties and Camassa 2010
 
-%base = '/project/6001470/ddeepwel/part_settling/comparisons_and_checks/camassa/';
-base = '/home/ddeepwel/scratch/bsuther/part_settling/comparisons_and_checks/camassa/';
-%base = '/Users/daviddeepwell/ComputeCanada/graham_scratch/bsuther/part_settling/comparisons_and_checks/camassa/';
+base = '/Volumes/2part_settling/comparisons_and_checks/camassa/';
 
 sim_case = 'fig3_better';
 
@@ -62,5 +60,5 @@ figure_defaults()
 
 check_make_dir('../figures')
 orig_dir = cd('../figures');
-print_figure('Camassa2010_error','format','pdf','size',[6 4])
+%print_figure('Camassa2010_error','format','pdf','size',[6 4])
 cd(orig_dir)

@@ -1,13 +1,14 @@
+function [] = plot_regime_gamm_sep_theta(style)
 % plot the minimum separation distance
 
-direc = '/scratch/ddeepwel/bsuther/part_settling/2particles/sigma1/Re0.25/compare_data';
+direc = '/Volumes/2part_settling/2particles/sigma1/Re1_4/compare_data';
 cd(direc)
 
 figure(88)
 clf
 
-style = 'entrain_mass_dist';
-%style = 'sep';
+%style = 'entrain_mass_dist';   %to plot the entrainment
+%style = 'sep';                 % to plot the minimum particle pair separation
 
 switch style
     case 'sep'
@@ -36,13 +37,13 @@ switch style
         load('entrain_dist_s2.mat')
         data = entrain_dist;
         orig_dir = pwd;
-        g1 = 0.9:-0.2:0.1;
+        g1 = 0.9:-0.2:0.3;
         suffix = {...
             '_dx25',...
             '_dx25',...
             '_dx25',...
             '_dx25',...
-            '_dx25',...
+            ...%'_dx25',...
             };
         clim = [1 1.40];
         for gg = 1:length(g1)
@@ -57,7 +58,7 @@ end
 [Ngamms, Ntheta] = size(data);
 
 
-%%%%%%  WARNING %%%%%
+%%%%%%  Notice  %%%%%
 % changing data here
 % but it is very minor
 if strcmp(style,'entrain_mass_dist')
@@ -114,7 +115,7 @@ yticks(0.1:0.2:0.9)
 set(gca,'XMinorTick','on');
 ax = gca;
 ax.XAxis.MinorTickValues = [22.5 67.5];
-xlabel('$\theta~(^\circ)$')
+xlabel('$\theta$ (deg)')
 ylabel('$\Gamma$')
 xlab = -0.3;
 zlab = 0.8;
@@ -145,7 +146,7 @@ switch style
     case 'entrain_mass_dist'
         load(['entrain_dist_',gamm_np,'.mat'])
         data = entrain_dist;
-        orig_dir = cd(['../',gamm_np(1:end-1),'.',gamm_np(end),'/1prt']);
+        orig_dir = cd(['../',gamm_np(1:end-1),'.',gamm_np(end),'/1prt_dx25']);
         [data1,ent_dist] = get_entrain_mass_dist(dist);
         data = data / (2*data1);
         cd(orig_dir)
@@ -219,7 +220,11 @@ end
 
 ax = gca;
 ax.RAxis.Label.String = '$s_0/D_p$';
-ax.ThetaAxis.Label.String = '$\theta~(^\circ)$';
+ax.RAxis.Label.Interpreter = 'latex';
+ax.RAxis.TickLabelInterpreter = 'latex';
+ax.ThetaAxis.Label.String = '$\theta$ (deg)';
+ax.ThetaAxis.Label.Interpreter = 'latex';
+ax.ThetaAxis.TickLabelInterpreter = 'latex';
 ax.ThetaAxis.Label.Position = [125 9.5 0];
 ax.ThetaAxis.TickValues = 90:30:180;
 ax.ThetaAxis.TickLabel = {'0','30','60','90'};
@@ -239,7 +244,7 @@ cbar = colorbar();
 cbar.Location = 'EastOutside';
 cbar.Label.Interpreter = 'latex';
 if strcmp(style,'sep')
-    cbar.Label.String = '$\min s/s_0 \times 100\%$';
+    cbar.Label.String = '$\min s/s_0$ (\%)';
 end
 pos = cbar.Position;
 pos(1) = 0.89;
